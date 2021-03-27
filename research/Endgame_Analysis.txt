@@ -1,0 +1,11 @@
+Type: repeated game
+
+This is after making the assumption that both players have the minimum required to end the game
+
+Player can:
+- Knock
+- Continue play
+
+If knock:
+    - Possibility of undercut
+    - Lower possible score

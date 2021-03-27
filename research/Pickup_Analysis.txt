@@ -1,0 +1,9 @@
+Type: repeated game
+
+Each player makes a sequential move of the following:
+- Pick up face up card
+- Pick up face down card
+
+Positive Utility:
+- Completes a set or run
+
