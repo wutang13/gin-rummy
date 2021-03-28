@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { CARD_VALUES, SUITS } from "./Constants";
 import _ from 'lodash';
-import { CardHand, getFlatHand, getCardInSequence, HandState, Card } from "./CardHand";
+import { CardHand, getFlatHand, getCardInSequence, HandState, Card, cardToString } from "./CardHand";
 
 type GameState = {
     userHand: HandState
@@ -28,18 +28,29 @@ export function GameManager(){
             <CardHand hand={gameState.computerHand}/>
             <div style={{display: 'flex', flexDirection: 'row'}}>
                 { gameState.discard.length > 0 ?
-                    <img src={`${process.env.PUBLIC_URL}/cards/${gameState.discard[gameState.discard.length-1]}.jpg`} alt={gameState.discard[gameState.discard.length-1]} style={{maxHeight: 200, margin: 10}}/>
+                    <img src={`${process.env.PUBLIC_URL}/cards/${cardToString(gameState.discard[gameState.discard.length-1])}.jpg`} alt={cardToString(gameState.discard[gameState.discard.length-1])} style={{maxHeight: 200, margin: 10}}/>
                     : <p style={{margin: 20}}>Empty</p>
                 }
-            <div>{`Cards Left: ${gameState.deck.length}`}</div>
+            <div>{`Cards Left: ${gameState.deck.length}`}{ gameState.deck.length > 0 ?
+                    <img src={`${process.env.PUBLIC_URL}/cards/${cardToString(gameState.deck[gameState.deck.length-1])}.jpg`} alt={cardToString(gameState.deck[gameState.deck.length-1])} style={{maxHeight: 200, margin: 10}}/>
+                    : <p style={{margin: 20}}>Empty</p>
+                }</div>
             </div>
             <CardHand hand={gameState.userHand}/>
             <div>
                 <button onClick={
                     () => {
                         const selectedCard = prompt('Select card to discard')
-                        if(selectedCard && getFlatHand(gameState.userHand).includes(selectedCard)){
-                            setGameState({...discardCard(selectedCard, true, gameState)})
+                        if(selectedCard){
+                            const suit = selectedCard[selectedCard.length - 1]
+                            const value = selectedCard.slice(0, selectedCard.length - 1)
+                            const discardedCard = {suit, value}
+
+                            if(getFlatHand(gameState.userHand).some(card => card.value === discardedCard?.value && card.suit === discardedCard?.suit)){
+                                setGameState({...discardCard(discardedCard, true, gameState)})
+                            } else {
+                                alert('Please select valid card from your hand')
+                            }
                         } else {
                             alert('Please select valid card from your hand')
                         }
@@ -64,6 +75,11 @@ export function GameManager(){
                         setGameState({...computerPlayerTurn(gameState)})
                     }
                 }>End Turn</button>
+                <button onClick={
+                    () => {
+                        setGameState(initGameState())
+                    }
+                }>Reset Game</button>
             </div>
         
         </div>
@@ -71,11 +87,11 @@ export function GameManager(){
 }
 
 function initGameState(): GameState{
-    let deck: string[] = []
+    let deck: Card[] = []
 
     SUITS.forEach((suit) => {
-        CARD_VALUES.forEach((val) => {
-            deck.push(`${val}${suit}`)
+        CARD_VALUES.forEach((value) => {
+            deck.push({value, suit})
         })
     })
 
@@ -96,28 +112,28 @@ function initGameState(): GameState{
     return { userHand, computerHand, deck, discard }
 }
 
-function buildHand(flatHand: string[]): HandState{
+function buildHand(flatHand: Card[]): HandState{
     const sortedHand = flatHand.sort((cardA, cardB) => {
 
-        const suitAOffset = SUITS.indexOf(cardA[1]) * 13
-        const suitBOffset = SUITS.indexOf(cardB[1]) * 13
+        const suitAOffset = SUITS.indexOf(cardA.suit) * 13
+        const suitBOffset = SUITS.indexOf(cardB.suit) * 13
 
-        const valA = CARD_VALUES.indexOf(cardA[0])
-        const valB = CARD_VALUES.indexOf(cardB[0])
+        const valA = CARD_VALUES.indexOf(cardA.value)
+        const valB = CARD_VALUES.indexOf(cardB.value)
 
         return (suitAOffset+valA) - (suitBOffset+valB)
     })
 
-    const runs: string[][] = []
+    const runs: Card[][] = []
 
     for(let i = 0; i < sortedHand.length-2; i++){
-        const currentRun: string[] = []
+        const currentRun: Card[] = []
 
         if(makesSequence(sortedHand, sortedHand[i])){
             currentRun.push(sortedHand[i])
 
             let nextCard = getCardInSequence(sortedHand[i], 1)
-            while(!!nextCard && sortedHand.includes(nextCard) && i < sortedHand.length){
+            while(!!nextCard && sortedHand.some(card => card.value == nextCard?.value && card.suit == nextCard?.suit) && i < sortedHand.length){
                 currentRun.push(nextCard)
                 i++
 
@@ -130,15 +146,15 @@ function buildHand(flatHand: string[]): HandState{
         }
     }
 
-    const filteredHand = flatHand.filter((card) => !runs.flat().includes(card))
+    const filteredHand = flatHand.filter((card) => !runs.flat().some(flatCard => card.value === flatCard?.value && card.suit === flatCard?.suit))
 
-    const sets: string[][] = []
+    const sets: Card[][] = []
     
-    CARD_VALUES.forEach((val) => {
-        const set: string[] = []
+    CARD_VALUES.forEach((value) => {
+        const set: Card[] = []
         SUITS.forEach((suit) => {
-            if(filteredHand.includes(`${val}${suit}`)){
-                set.push(`${val}${suit}`)
+            if(filteredHand.some(card => card.suit === suit && card.value === value)){
+                set.push({suit, value})
             }
         })  
         
@@ -147,16 +163,16 @@ function buildHand(flatHand: string[]): HandState{
         }
     })
 
-    const deadwood = filteredHand.filter((card) => !sets.flat().includes(card))
+    const deadwood = filteredHand.filter((card) => !sets.flat().some(flatCard => card.value === flatCard?.value && card.suit === flatCard?.suit))
     
     
     return {sets, runs, deadwood}
 }
 
-function discardCard(selectedCard: string, user: boolean, gameState: GameState): GameState{
+function discardCard(selectedCard: Card, user: boolean, gameState: GameState): GameState{
 
     const hand = user ? getFlatHand(gameState.userHand) : getFlatHand(gameState.computerHand)
-    const newHand = buildHand(hand.filter((card) => card !== selectedCard))
+    const newHand = buildHand(hand.filter((card) => (card.value !== selectedCard.value) || (card.suit !== selectedCard.suit)))
 
     gameState.discard.push(selectedCard)
 
@@ -183,13 +199,20 @@ function computerPlayerTurn(gameState: GameState){
     // Decide if drawing face up or face down card
     const drawFromDeck = computerDrawCardFromDeck(gameState)
 
+    console.log(`Starting state for computer`)
+    console.log(gameState)
+
+
     drawFromDeck ? console.log('Computer Drawing from deck') : console.log('Computer Drawing from discard')
 
     const drawnCard = drawFromDeck ? gameState.deck.pop() : gameState.discard.pop()
 
+
     const hand = getFlatHand(gameState.computerHand)
 
     if(drawnCard){
+        console.log(`Drawn Card: ${cardToString(drawnCard)}`)
+
         hand.push(drawnCard)
 
         gameState.computerHand = buildHand(hand)   
@@ -199,7 +222,12 @@ function computerPlayerTurn(gameState: GameState){
     // player gain
     const selectedDiscardCard = evaluateMovesTraditional(gameState)
 
-    console.log(`Computer discarding: ${selectedDiscardCard}`)
+    if(typeof selectedDiscardCard === "string"){
+        console.log('Computer Knocks')
+        return {...gameState, knocker: 'computer'}
+    }
+
+    console.log(`Computer discarding: ${cardToString(selectedDiscardCard)}`)
 
     // Discard the card
     const discardIndex = hand.indexOf(selectedDiscardCard);
@@ -223,12 +251,10 @@ function computerDrawCardFromDeck(gameState: GameState): boolean {
 
     if(gameState.discard.length > 0){
         const faceupCard = gameState.discard[gameState.discard.length - 1]
-
-        const faceUpValue = faceupCard[0]
     
-        const existingSet = gameState.computerHand.sets.some((set) => set[0][0] === faceUpValue)
+        const existingSet = gameState.computerHand.sets.some((set) => set[0].value=== faceupCard.value)
 
-        const makesSet = gameState.computerHand.deadwood.filter((card) => card[0] === faceUpValue).length > 1
+        const makesSet = gameState.computerHand.deadwood.filter((card) => card.value === faceupCard.value).length > 1
 
         const existingRun = gameState.computerHand.runs.some((run) => getCardInSequence(run[run.length-1], 1) === faceupCard || getCardInSequence(run[0], -1) === faceupCard)
     
@@ -240,38 +266,35 @@ function computerDrawCardFromDeck(gameState: GameState): boolean {
     return true
 }
 
-function getValueCount(hand: string[]): any {
+function getValueCount(hand: Card[]): any {
 
     const valueCountMap: any = {'A': 0, '2': 0, '3': 0, '4': 0, '5' : 0, '6': 0, '7': 0, '8': 0, '9': 0, '10': 0, 'J': 0, 'Q': 0, 'K': 0}
 
     hand.forEach((card) => {
-        const cardVal = card.split("")[0]
-        if(cardVal in valueCountMap){
-            valueCountMap[cardVal] += 1 
+        if(card.value in valueCountMap){
+            valueCountMap[card.value] += 1 
         }
     })
 
     return valueCountMap
 }
 
-function makesSequence(hand: string[], card: string): boolean{
+function makesSequence(hand: Card[], card: Card): boolean{
 
-    const cardValue = card[0]
-
-    if(cardValue !== 'A' && cardValue !== '2'){
+    if(card.value !== 'A' && card.value !== '2'){
         const prev1 = getCardInSequence(card, -1)
         const prev2 =  getCardInSequence(card, -2)
 
-        if(prev1 && prev2 && hand.includes(prev1) && hand.includes(prev2)){
+        if(prev1 && prev2 && hand.some(card1 => cardToString(card1) === cardToString(prev1)) &&  hand.some(card2 => cardToString(card2) === cardToString(prev2))){
             return true
         }
     }
 
-    if(cardValue !== 'K' && cardValue !== 'Q'){
+    if(card.value !== 'K' && card.value !== 'Q'){
         const next1 = getCardInSequence(card, 1)
         const next2 =  getCardInSequence(card, 2)
 
-        if(next1 && next2 && hand.includes(next1) && hand.includes(next2)){
+        if(next1 && next2 && hand.some(card1 => cardToString(card1) === cardToString(next1)) && hand.some(card2 => cardToString(card2) === cardToString(next2))){
             return true
         }
     }
@@ -279,26 +302,21 @@ function makesSequence(hand: string[], card: string): boolean{
     const prev1 = getCardInSequence(card, -1)
     const next1 = getCardInSequence(card, 1)
 
-    if(prev1 && next1 && hand.includes(next1) && hand.includes(prev1)){
+    if(prev1 && next1 && hand.some(card1 => cardToString(card1) === cardToString(prev1)) && hand.some(card1 => cardToString(card1) === cardToString(next1))){
         return true
     }
 
     return false
 }
 
-function evaluateMovesTraditional(gameState: GameState): string{
+function evaluateMovesTraditional(gameState: GameState): Card | string{
 
     const valueCount = getValueCount(gameState.computerHand.deadwood)
     const highValueCardCount = valueCount['10'] + valueCount['J'] + valueCount['Q'] + valueCount['K']
 
     // If half of deck expended start getting rid of high value cards if there are any in hand
     if(gameState.deck.length < 16 && highValueCardCount > 0){
-        const maxCard = gameState.computerHand.deadwood.sort((cardA, cardB) => {
-            const valA = cardA[0]
-            const valB = cardB[0]
-
-            return CARD_VALUES.indexOf(valA) - CARD_VALUES.indexOf(valB)
-        }).pop()
+        const maxCard = gameState.computerHand.deadwood.sort((cardA, cardB) =>  CARD_VALUES.indexOf(cardA.value) - CARD_VALUES.indexOf(cardB.value)).pop()
 
         return maxCard ? maxCard : 'knock'
     } 
@@ -321,7 +339,7 @@ function shouldKnock(gameState: GameState): boolean {
     return false
 }
 
-function rankCardUtility(deadwood: string[]): Utility[]{
+function rankCardUtility(deadwood: Card[]): Utility[]{
 
     // +1 for every copy of the card
     // +1 for every card in sequence
@@ -336,15 +354,15 @@ function rankCardUtility(deadwood: string[]): Utility[]{
         let preSet = false
         let preRun = false
 
-        if(cardValueCount[card[0]] > 1){
-            score += (cardValueCount[card[0]] - 1)
+        if(cardValueCount[card.value] > 1){
+            score += (cardValueCount[card.value] - 1)
             preSet = true
         }
 
         const nextCard = getCardInSequence(card, 1)
         const prevCard = getCardInSequence(card, -1)
 
-        if((nextCard && deadwood.includes(nextCard)) || (prevCard && deadwood.includes(prevCard))){
+        if((nextCard && deadwood.some(card1 => cardToString(card1) === cardToString(nextCard))) || (prevCard && deadwood.some(card1 => cardToString(card1) === cardToString(prevCard)))){
             score += 1
             preRun = true
         }
@@ -353,18 +371,18 @@ function rankCardUtility(deadwood: string[]): Utility[]{
             score += 1
         }
 
-        if(CARD_VALUES.indexOf(card[0]) > 8){
+        if(CARD_VALUES.indexOf(card.value) > 8){
             score--
-        } else if(CARD_VALUES.indexOf(card[0]) < 2){
+        } else if(CARD_VALUES.indexOf(card.value) < 2){
             score++
         }
 
         return {card, score}
-    }).sort((cardUtilityA, cardUtilityB) => cardUtilityA.score - cardUtilityB.score)
+    }).sort((cardUtilityA, cardUtilityB) => cardUtilityB.score - cardUtilityA.score)
+
+    console.log(cardRanking)
 
     return cardRanking
 }
-
-// TODO create evaluateMovesMiniMax
 
 // TODO different heuristic 

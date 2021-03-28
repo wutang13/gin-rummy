@@ -16,7 +16,7 @@ export function CardHand(props: {hand: HandState}){
         <div>
             <div>
                 {getFlatHand(props.hand).map((card) => {
-                    return <img src={`${process.env.PUBLIC_URL}/cards/${card}.jpg`} alt={cardToString(card)} style={{maxHeight: 200, margin: 10}} key={cardToString(card)}/>
+                    return <img src={`${process.env.PUBLIC_URL}/cards/${cardToString(card)}.jpg`} alt={cardToString(card)} style={{maxHeight: 200, margin: 10}} key={cardToString(card)}/>
                 })}
             </div>
             <p>Score: {calculateDeadwood(props.hand.deadwood)}</p>
@@ -41,14 +41,13 @@ export function getFlatHand(hand: HandState): Card[]{
 
 export function getCardInSequence(card: Card, offset = 1): Card | null {
     const nextValue = CARD_VALUES[CARD_VALUES.indexOf(card.value) + offset]
-
-    if(!!nextValue){
+    if(!nextValue){
         return null
     }
 
     return {value: nextValue, suit: card.suit}
 }
 
-function cardToString(card: Card): string{
+export function cardToString(card: Card): string{
     return `${card.value}${card.suit}`
 }
