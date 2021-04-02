@@ -26,7 +26,7 @@ export function CardHand(props: {hand: HandState,
                             onClick={() => onCardSelect && setGameState ? setGameState({...onCardSelect(card, gameState)}) : console.log("You cannot discard an opponent's card")} 
                             src={faceUp ? `${process.env.PUBLIC_URL}/cards/${cardToString(card)}.jpg` : `${process.env.PUBLIC_URL}/cards/blue_back.jpg`} 
                             alt={cardToString(card)} 
-                            style={{maxHeight: 200, margin: 10}} 
+                            style={{maxHeight: 180, margin: 10}} 
                             key={cardToString(card)}/>
                 })}
             </div>

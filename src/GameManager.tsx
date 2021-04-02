@@ -62,7 +62,7 @@ export function GameManager(){
                             src={`${process.env.PUBLIC_URL}/cards/${cardToString(gameState.discard[gameState.discard.length-1])}.jpg`} 
                             onClick={() => setGameState({...pickupCard(true, gameState)})}
                             alt={cardToString(gameState.discard[gameState.discard.length-1])} 
-                            style={{maxHeight: 200, margin: 10}}/>
+                            style={{maxHeight: 180, margin: 10}}/>
                         : <p style={{margin: 20}}>Empty</p>
                     }
                 </div>
@@ -79,10 +79,10 @@ export function GameManager(){
                     <p className='game-text' style ={{fontSize: '20px'}}>{`Cards Left: ${gameState.deck.length}`}</p>
                     { gameState.deck.length > 0 ?
                         <img 
-                            src={`${process.env.PUBLIC_URL}/cards/${cardToString(gameState.deck[gameState.deck.length-1])}.jpg`} 
+                            src={`${process.env.PUBLIC_URL}/cards/blue_back.jpg`} 
                             onClick={() => setGameState({...pickupCard(false, gameState)})}
                             alt={cardToString(gameState.deck[gameState.deck.length-1])} 
-                            style={{maxHeight: 200, margin: 10}}/>
+                            style={{maxHeight: 180, margin: 10}}/>
                         : <p style={{margin: 20}}>Empty</p>
                     }
                 </div>
