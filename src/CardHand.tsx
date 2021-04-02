@@ -1,4 +1,5 @@
 import { CARD_VALUES } from "./Constants"
+import { GameState } from "./GameManager"
 
 export type Card = {
     value: string
@@ -11,15 +12,25 @@ export type HandState = {
     deadwood: Card[]
 }
 
-export function CardHand(props: {hand: HandState}){
+export function CardHand(props: {hand: HandState,
+                                 onCardSelect?: (selectedCard: Card, gameState: GameState) => GameState,
+                                 gameState: GameState,
+                                 setGameState?: any,
+                                 faceUp: boolean}){
+    const {gameState, setGameState, onCardSelect, hand, faceUp} = props
     return (
         <div>
             <div>
                 {getFlatHand(props.hand).map((card) => {
-                    return <img src={`${process.env.PUBLIC_URL}/cards/${cardToString(card)}.jpg`} alt={cardToString(card)} style={{maxHeight: 200, margin: 10}} key={cardToString(card)}/>
+                    return <img 
+                            onClick={() => onCardSelect && setGameState ? setGameState({...onCardSelect(card, gameState)}) : console.log("You cannot discard an opponent's card")} 
+                            src={faceUp ? `${process.env.PUBLIC_URL}/cards/${cardToString(card)}.jpg` : `${process.env.PUBLIC_URL}/cards/blue_back.jpg`} 
+                            alt={cardToString(card)} 
+                            style={{maxHeight: 200, margin: 10}} 
+                            key={cardToString(card)}/>
                 })}
             </div>
-            <p>Score: {calculateDeadwood(props.hand.deadwood)}</p>
+            {faceUp ? <p className='game-text' style={{marginLeft: '20px'}}>Score: {calculateDeadwood(hand.deadwood)}</p> : undefined}
         </div>
     )
 }

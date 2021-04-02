@@ -1,13 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { CARD_VALUES, SUITS } from "./Constants";
+import { CARD_VALUES, SUITS, STAGES } from "./Constants";
 import _ from 'lodash';
 import { CardHand, getFlatHand, getCardInSequence, HandState, Card, cardToString } from "./CardHand";
+import Button from 'react-bootstrap/Button'
+import Icon from '@mdi/react'
+import { mdiCog, mdiMenu } from '@mdi/js'
+import { Dropdown } from "react-bootstrap";
 
-type GameState = {
+export type GameState = {
     userHand: HandState
     computerHand: HandState
     deck: Card[]
     discard: Card[]
+    currentStage: string
     knocker?: string
     winner?: string
 }
@@ -23,65 +28,68 @@ export function GameManager(){
 
     useEffect(()=> console.log(gameState))
 
+    const turnText = () => {
+        switch(gameState.currentStage){
+            case 'discard':
+                return 'It is your turn to discard a card'
+            case 'pickup':
+                return 'It is your turn to pickup a card'
+            default:
+                return 'It is the computer\'s turn'
+        }
+    }
+
     return(
         <div style={{margin: '30px'}}>
-            <CardHand hand={gameState.computerHand}/>
-            <div style={{display: 'flex', flexDirection: 'row'}}>
-                { gameState.discard.length > 0 ?
-                    <img src={`${process.env.PUBLIC_URL}/cards/${cardToString(gameState.discard[gameState.discard.length-1])}.jpg`} alt={cardToString(gameState.discard[gameState.discard.length-1])} style={{maxHeight: 200, margin: 10}}/>
-                    : <p style={{margin: 20}}>Empty</p>
-                }
-            <div>{`Cards Left: ${gameState.deck.length}`}{ gameState.deck.length > 0 ?
-                    <img src={`${process.env.PUBLIC_URL}/cards/${cardToString(gameState.deck[gameState.deck.length-1])}.jpg`} alt={cardToString(gameState.deck[gameState.deck.length-1])} style={{maxHeight: 200, margin: 10}}/>
-                    : <p style={{margin: 20}}>Empty</p>
-                }</div>
-            </div>
-            <CardHand hand={gameState.userHand}/>
-            <div>
-                <button onClick={
-                    () => {
-                        const selectedCard = prompt('Select card to discard')
-                        if(selectedCard){
-                            const suit = selectedCard[selectedCard.length - 1]
-                            const value = selectedCard.slice(0, selectedCard.length - 1)
-                            const discardedCard = {suit, value}
+            <div style={{display: 'flex', justifyContent: 'space-between'}}>
+                <div></div>
+                <CardHand hand={gameState.computerHand} gameState={gameState} faceUp={false}/>
+                <Dropdown>
+                    <Dropdown.Toggle className='menu-button'>
+                        <Icon path={mdiMenu} size={2} color={"gray"}/>
+                    </Dropdown.Toggle>
 
-                            if(getFlatHand(gameState.userHand).some(card => card.value === discardedCard?.value && card.suit === discardedCard?.suit)){
-                                setGameState({...discardCard(discardedCard, true, gameState)})
-                            } else {
-                                alert('Please select valid card from your hand')
-                            }
-                        } else {
-                            alert('Please select valid card from your hand')
-                        }
-                    }
-                }>Discard</button>
-                <button onClick={() => {
-                    if(gameState.discard.length > 0){
-                        setGameState({...pickupCard(true, true, gameState)})
-                    } else {
-                        alert('no more cards in discard pile')
-                    }
-                }}>Pickup Face Up</button>
-                <button onClick={() => {
-                    if(gameState.deck.length > 0){
-                        setGameState({...pickupCard(false, true, gameState)})
-                    } else {
-                        alert('no more cards in deck')
-                    }
-                }}>Pickup Top Of Deck</button>
-                <button onClick={
-                    () => {
-                        setGameState({...computerPlayerTurn(gameState)})
-                    }
-                }>End Turn</button>
-                <button onClick={
-                    () => {
-                        setGameState(initGameState())
-                    }
-                }>Reset Game</button>
+                    <Dropdown.Menu className='in-game-menu'>
+                        <Dropdown.Item className='menu-item' onClick={() => setGameState(initGameState())}>Reset Game</Dropdown.Item>
+                    </Dropdown.Menu>
+                </Dropdown>
             </div>
-        
+            <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'center'}}>
+                <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'space-evenly'}}>
+                    <p className='game-text'>Discard Pile</p>
+                    { gameState.discard.length > 0 ?
+                        <img 
+                            src={`${process.env.PUBLIC_URL}/cards/${cardToString(gameState.discard[gameState.discard.length-1])}.jpg`} 
+                            onClick={() => setGameState({...pickupCard(true, gameState)})}
+                            alt={cardToString(gameState.discard[gameState.discard.length-1])} 
+                            style={{maxHeight: 200, margin: 10}}/>
+                        : <p style={{margin: 20}}>Empty</p>
+                    }
+                </div>
+                <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'space-evenly', margin: '10px 100px 10px 100px'}}>
+                    <p className='game-text'>{turnText()}</p>
+                    <button className="game-button" onClick={
+                        () => {
+                            setGameState({...computerPlayerTurn(gameState)})
+                        }
+                    }>End Turn</button>
+                </div>
+                <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'space-evenly'}}>
+                    <p className='game-text'>Deck</p>
+                    <p className='game-text' style ={{fontSize: '20px'}}>{`Cards Left: ${gameState.deck.length}`}</p>
+                    { gameState.deck.length > 0 ?
+                        <img 
+                            src={`${process.env.PUBLIC_URL}/cards/${cardToString(gameState.deck[gameState.deck.length-1])}.jpg`} 
+                            onClick={() => setGameState({...pickupCard(false, gameState)})}
+                            alt={cardToString(gameState.deck[gameState.deck.length-1])} 
+                            style={{maxHeight: 200, margin: 10}}/>
+                        : <p style={{margin: 20}}>Empty</p>
+                    }
+                </div>
+            </div>
+            <div style={{display: 'flex', justifyContent: 'center'}}>
+                <CardHand hand={gameState.userHand} onCardSelect={discardCard} gameState={gameState} setGameState={setGameState} faceUp={true}/>
+            </div>    
         </div>
     )
 }
@@ -106,10 +114,12 @@ function initGameState(): GameState{
     const discard = [deck[0]]
     deck = deck.slice(1)
 
+    const currentStage = STAGES[0] // TODO Should randomly select between computer and player
+
     const userHand = buildHand(userHandFlat)
     const computerHand = buildHand(computerHandFlat)
 
-    return { userHand, computerHand, deck, discard }
+    return { userHand, computerHand, deck, discard, currentStage }
 }
 
 function buildHand(flatHand: Card[]): HandState{
@@ -169,28 +179,35 @@ function buildHand(flatHand: Card[]): HandState{
     return {sets, runs, deadwood}
 }
 
-function discardCard(selectedCard: Card, user: boolean, gameState: GameState): GameState{
+function discardCard(selectedCard: Card, gameState: GameState): GameState{
 
-    const hand = user ? getFlatHand(gameState.userHand) : getFlatHand(gameState.computerHand)
-    const newHand = buildHand(hand.filter((card) => (card.value !== selectedCard.value) || (card.suit !== selectedCard.suit)))
+    if(gameState.currentStage === 'discard'){
+        const hand = getFlatHand(gameState.userHand)
+        const newHand = buildHand(hand.filter((card) => (card.value !== selectedCard.value) || (card.suit !== selectedCard.suit)))
+    
+        gameState.discard.push(selectedCard)
+        gameState.userHand = newHand
+        gameState.currentStage = "computer"
+    }
 
-    gameState.discard.push(selectedCard)
-
-    return user ? {...gameState, userHand: newHand} : {...gameState, computerHand: newHand}
+    return gameState
 }
 
-function pickupCard(faceUp: boolean, user: boolean, gameState: GameState): GameState{
+function pickupCard(faceUp: boolean, gameState: GameState): GameState{
 
-    const selectedCard = faceUp ? gameState.discard.pop() : gameState.deck.pop()
+    if(gameState.currentStage === "pickup"){
+        const selectedCard = faceUp ? gameState.discard.pop() : gameState.deck.pop()
 
-    if(selectedCard){
-        const hand = user ? getFlatHand(gameState.userHand) : getFlatHand(gameState.computerHand)
-        hand.push(selectedCard)
-
-        const handState = buildHand(hand)
-        user ? gameState.userHand = handState : gameState.computerHand = handState
-    }
+        if(selectedCard){
+            const hand = getFlatHand(gameState.userHand)
+            hand.push(selectedCard)
     
+            const handState = buildHand(hand)
+            gameState.userHand = handState
+            gameState.currentStage = "discard"
+        }
+    }
+
     return gameState
 }
 
@@ -243,6 +260,7 @@ function computerPlayerTurn(gameState: GameState){
         console.log('Computer Knocks')
         return {...gameState, knocker: 'computer'}
     }
+    gameState.currentStage = "pickup"
 
     return gameState
 }

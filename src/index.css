@@ -5,9 +5,62 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: #f1faee;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+.game-text {
+  font-family: 'Lato';
+  font-size: 30px;
+  color: darkgray;
+  margin: 0;
+}
+
+.game-button {
+  font-family: 'Lato';
+  font-size: 20px;
+  color: darkgray;
+  background-color: none;
+	box-shadow:inset 0px 34px 0px -15px #b54b3a;
+	background-color:#a73f2d;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	padding:9px 23px;
+	text-decoration:none;
+	text-shadow:0px -1px 0px #7a2a1d;
+  border-radius: 20px;
+}
+
+.game-button:hover {
+	background-color:#b34332;
+}
+
+.game-button:active {
+	position:relative;
+	top:1px;
+}
+
+.menu-item {
+  font-family: 'Lato';
+  font-size: 20px;
+  color: #F1FAEE;
+  margin: 10px;
+  text-decoration: none;
+}
+
+.menu-button {
+  background: transparent;
+  border: none;
+  outline-width: 0;
+}
+
+.in-game-menu {
+  background-color: #A8DADC;
+  border-radius: 10px;
+  padding: 10px;
 }

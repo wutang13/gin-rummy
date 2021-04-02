@@ -1,5 +1,11 @@
 Create Normal Form Games for:
-- Pick up/Discard
+- Pick up
 - Endgame
 
 Calculate probability of getting a winning hand at each round
+
+UI
+- Start screen
+- Replace buttons with card clicks 
+- Make text elements look better
+- options menu
