@@ -35,7 +35,7 @@ export function CardHand(props: {hand: HandState,
     )
 }
 
-function calculateDeadwood(deadwood: Card[]){
+export function calculateDeadwood(deadwood: Card[]): number{
     let score = 0
 
     deadwood.forEach((card) => {
@@ -61,4 +61,34 @@ export function getCardInSequence(card: Card, offset = 1): Card | null {
 
 export function cardToString(card: Card): string{
     return `${card.value}${card.suit}`
+}
+
+export function nameOfCard(card: Card): string{
+    const suit = () => {
+        switch(card.suit){
+            case 'H':
+                return 'Hearts'
+            case 'D':
+                return 'Diamonds'
+            case 'S':
+                return 'Spades'
+            default:
+                return 'Clubs'
+    }}
+
+    const value = () => {
+        switch(card.value){
+            case 'A':
+                return 'Ace'
+            case 'K':
+                return 'King'
+            case 'Q':
+                return 'Queen'
+            case 'J':
+                return 'Jack'
+            default:
+                return card.value
+    }}
+
+    return `${value()} of ${suit()}`
 }

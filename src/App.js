@@ -1,7 +1,11 @@
 import './App.css';
+import React, { useState } from "react";
 import { GameManager } from './GameManager';
 
 function App() {
+
+  const [gameStarted, setGameStarted] = useState(false)
+
   return (
     <>
       <h1 style={{fontFamily: 'Lato',
@@ -11,7 +15,12 @@ function App() {
                   margin:"0",
                   textAlign: 'center',
                   padding: '20px'}}>Gin Rummy</h1>
-      <GameManager/>
+      {
+        gameStarted ? <GameManager onExit={setGameStarted}/> : 
+        <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '500px'}}>
+          <button className='game-button' onClick={() => setGameStarted(true)}>Start Game</button>
+        </div>
+      }
     </>
   
   );

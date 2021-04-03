@@ -63,4 +63,6 @@ code {
   background-color: #A8DADC;
   border-radius: 10px;
   padding: 10px;
+  display: flex;
+  flex-direction: column;
 }
