@@ -1,22 +1,22 @@
 {
   "files": {
-    "main.css": "/gin-rummy/static/css/main.b8bab3e3.chunk.css",
-    "main.js": "/gin-rummy/static/js/main.a5c3e122.chunk.js",
-    "main.js.map": "/gin-rummy/static/js/main.a5c3e122.chunk.js.map",
+    "main.css": "/gin-rummy/static/css/main.f313e9a0.chunk.css",
+    "main.js": "/gin-rummy/static/js/main.0fbbb458.chunk.js",
+    "main.js.map": "/gin-rummy/static/js/main.0fbbb458.chunk.js.map",
     "runtime-main.js": "/gin-rummy/static/js/runtime-main.8f6daec5.js",
     "runtime-main.js.map": "/gin-rummy/static/js/runtime-main.8f6daec5.js.map",
-    "static/js/2.ffa4f476.chunk.js": "/gin-rummy/static/js/2.ffa4f476.chunk.js",
-    "static/js/2.ffa4f476.chunk.js.map": "/gin-rummy/static/js/2.ffa4f476.chunk.js.map",
+    "static/js/2.eb64f044.chunk.js": "/gin-rummy/static/js/2.eb64f044.chunk.js",
+    "static/js/2.eb64f044.chunk.js.map": "/gin-rummy/static/js/2.eb64f044.chunk.js.map",
     "static/js/3.1fca1d9f.chunk.js": "/gin-rummy/static/js/3.1fca1d9f.chunk.js",
     "static/js/3.1fca1d9f.chunk.js.map": "/gin-rummy/static/js/3.1fca1d9f.chunk.js.map",
     "index.html": "/gin-rummy/index.html",
-    "static/css/main.b8bab3e3.chunk.css.map": "/gin-rummy/static/css/main.b8bab3e3.chunk.css.map",
-    "static/js/2.ffa4f476.chunk.js.LICENSE.txt": "/gin-rummy/static/js/2.ffa4f476.chunk.js.LICENSE.txt"
+    "static/css/main.f313e9a0.chunk.css.map": "/gin-rummy/static/css/main.f313e9a0.chunk.css.map",
+    "static/js/2.eb64f044.chunk.js.LICENSE.txt": "/gin-rummy/static/js/2.eb64f044.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.8f6daec5.js",
-    "static/js/2.ffa4f476.chunk.js",
-    "static/css/main.b8bab3e3.chunk.css",
-    "static/js/main.a5c3e122.chunk.js"
+    "static/js/2.eb64f044.chunk.js",
+    "static/css/main.f313e9a0.chunk.css",
+    "static/js/main.0fbbb458.chunk.js"
   ]
 }
