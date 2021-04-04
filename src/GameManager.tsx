@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { CARD_VALUES, SUITS, GIN_BONUS, UNDERCUT_BONUS } from "./Constants";
+import { CARD_VALUES, SUITS, GIN_BONUS, UNDERCUT_BONUS, NULL_GAME } from "./Constants";
 import _ from 'lodash';
 import { CardHand, getFlatHand, getCardInSequence, HandState, Card, cardToString, calculateDeadwood, nameOfCard } from "./CardHand";
 import Icon from '@mdi/react'
@@ -25,13 +25,15 @@ type Utility = {
 
 export function GameManager(props: {onExit: (toggle: boolean) => void}){
 
-    const [gameState, setGameState] = useState(initGameState())
+    const [gameState, setGameState] = useState<GameState>(NULL_GAME)
 
     useEffect(()=> {
         if(gameState.currentStage === 'computer'){
             setGameState({...computerPlayerTurn(gameState)})
         }
     }, [gameState])
+
+    useEffect(() => setGameState({...initGameState()}), [])
 
     const turnText = () => {
         switch(gameState.currentStage){
@@ -138,7 +140,9 @@ function initGameState(startStage?: string): GameState{
     const discard = [deck[0]]
     deck = deck.slice(1)
 
-    const currentStage = startStage ?? Math.random() > 0.5 ? 'computer' : 'pickup' 
+    console.log(startStage)
+    const currentStage = startStage ?? (Math.random() > 0.5 ? 'computer' : 'pickup') 
+    console.log(currentStage)
 
     const userHand = buildHand(userHandFlat)
     const computerHand = buildHand(computerHandFlat)
@@ -153,8 +157,7 @@ function startNextRound(gameState: GameState): GameState {
     const userGameScore = gameState.userGameScore
     const computerGameScore = gameState.computerGameScore
 
-    alert(gameState.winner)
-    const starter = gameState.winner == 'You' ? 'pickup' : 'computer'
+    const starter = gameState.winner === 'You' ? 'pickup' : 'computer'
 
     return {...initGameState(starter), computerGameScore, userGameScore}
 }
@@ -254,9 +257,6 @@ function computerPlayerTurn(gameState: GameState){
     // Decide if drawing face up or face down card
     const drawFromDeck = computerDrawCardFromDeck(gameState)
 
-    console.log(`Starting state for computer`)
-    console.log(gameState)
-
     const computerMoves = []
 
     drawFromDeck ? computerMoves.push('Computer drew from deck') : computerMoves.push('Computer drew from discard')
@@ -266,8 +266,6 @@ function computerPlayerTurn(gameState: GameState){
     const hand = getFlatHand(gameState.computerHand)
 
     if(drawnCard){
-        console.log(`Drawn Card: ${cardToString(drawnCard)}`)
-
         hand.push(drawnCard)
 
         gameState.computerHand = buildHand(hand)   
@@ -279,7 +277,6 @@ function computerPlayerTurn(gameState: GameState){
     const selectedDiscardCard  = typeof possibleDiscardCard === "string" && drawnCard ? drawnCard : possibleDiscardCard
 
     if(typeof selectedDiscardCard != 'string'){
-        console.log(`Computer discarding: ${cardToString(selectedDiscardCard)}`)
         computerMoves.push(`Opponent discarded the ${nameOfCard(selectedDiscardCard)}`) 
 
         // Discard the card
@@ -294,7 +291,6 @@ function computerPlayerTurn(gameState: GameState){
 
     // Declare knocking if criteria met
     if(shouldKnock(gameState)){
-        console.log('Computer Knocks')
         return knock(gameState, false)
     }
     gameState.currentStage = "pickup"
@@ -438,8 +434,6 @@ function rankCardUtility(deadwood: Card[]): Utility[]{
         return {card, score}
     }).sort((cardUtilityA, cardUtilityB) => cardUtilityB.score - cardUtilityA.score)
 
-    console.log(cardRanking)
-
     return cardRanking
 }
 
@@ -451,44 +445,41 @@ function knock(gameState: GameState, user: boolean): GameState{
     const computerScore = calculateDeadwood(gameState.computerHand.deadwood)
 
     if(user && (playerScore === 0)){
-        return {...gameState, userGameScore: computerScore+GIN_BONUS, winner: 'You'}
+        return {...gameState, userGameScore: gameState.userGameScore + computerScore+GIN_BONUS, winner: 'You'}
     } else if(!user && (computerScore === 0)){
-        return {...gameState, computerGameScore: playerScore+GIN_BONUS, winner: 'Your Opponent'}
+        return {...gameState, computerGameScore:  gameState.computerGameScore + playerScore+GIN_BONUS, winner: 'Your Opponent'}
     }
 
     const {updatedPlayerScore, updatedComputerScore} = layoff(gameState, user)
 
     if(user && (updatedPlayerScore < updatedComputerScore)){
-        return {...gameState, userGameScore: updatedComputerScore - updatedPlayerScore, winner: 'You'}
+        return {...gameState, userGameScore: gameState.userGameScore + updatedComputerScore - updatedPlayerScore, winner: 'You'}
     } else if(user && (updatedPlayerScore > updatedComputerScore)){
-        return {...gameState, computerGameScore: updatedPlayerScore - updatedComputerScore + UNDERCUT_BONUS,  winner: 'Your Opponent'}
+        return {...gameState, computerGameScore: gameState.computerGameScore + updatedPlayerScore - updatedComputerScore + UNDERCUT_BONUS,  winner: 'Your Opponent'}
     } else if(!user && (updatedPlayerScore < updatedComputerScore)){
-        return {...gameState, userGameScore:  updatedComputerScore - updatedPlayerScore + UNDERCUT_BONUS,  winner: 'You'}
+        return {...gameState, userGameScore:   gameState.userGameScore + updatedComputerScore - updatedPlayerScore + UNDERCUT_BONUS,  winner: 'You'}
     } else {
-        return {...gameState, computerGameScore:  updatedPlayerScore - updatedComputerScore,  winner: 'Your Opponent'}
+        return {...gameState, computerGameScore:  gameState.computerGameScore + updatedPlayerScore - updatedComputerScore,  winner: 'Your Opponent'}
     }
 }
 
 function layoff(gameState: GameState, user: boolean): {updatedPlayerScore: number, updatedComputerScore: number}{
 
     if(user){
-        gameState.computerHand.deadwood = gameState.computerHand.deadwood.filter((card) => {
+        const tempDeadwood = gameState.computerHand.deadwood.filter((card) => {
             const inSet = gameState.userHand.sets.some((set) => set[0].value === card.value)
             const extendsRun = gameState.userHand.runs.some((run) => makesSequence(run, card))
             return !inSet && !extendsRun
         })
+
+        return {updatedPlayerScore: calculateDeadwood(gameState.userHand.deadwood), updatedComputerScore: calculateDeadwood(tempDeadwood)}
     } else {
-        gameState.computerHand.deadwood = gameState.userHand.deadwood.filter((card) => {
+        const tempDeadwood = gameState.userHand.deadwood.filter((card) => {
             const inSet = gameState.computerHand.sets.some((set) => set[0].value === card.value)
             const extendsRun = gameState.computerHand.runs.some((run) => makesSequence(run, card))
             return !inSet && !extendsRun
         })
+
+        return {updatedPlayerScore: calculateDeadwood(tempDeadwood), updatedComputerScore: calculateDeadwood(gameState.computerHand.deadwood)}
     }
-
-    let updatedPlayerScore = calculateDeadwood(gameState.userHand.deadwood)
-    let updatedComputerScore = calculateDeadwood(gameState.computerHand.deadwood)
-
-    return {updatedPlayerScore, updatedComputerScore}
 }
-
-// TODO different heuristic 

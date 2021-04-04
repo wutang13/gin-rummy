@@ -11,3 +11,13 @@ export const GAME_SCORE_LIMIT = 100
 export const GIN_BONUS = 25
 
 export const UNDERCUT_BONUS = 25
+
+export const NULL_GAME = {
+    userHand: {sets: [], runs: [], deadwood: []},
+    computerHand: {sets: [], runs: [], deadwood: []},
+    deck: [],
+    discard: [],
+    currentStage: '',
+    userGameScore: 0,
+    computerGameScore: 0
+}
