@@ -1,11 +1,15 @@
 Create Normal Form Games for:
 - Pick up
+- End Round/End Game
+
+Read up on strategies
+
+Improve:
+- Adjust discard based on card history
+- Adjust discard/pickup according user moves
+
+Features
 - Endgame
-
-Calculate probability of getting a winning hand at each round
-
-UI
-- Start screen
-- Replace buttons with card clicks 
-- Make text elements look better
-- options menu
+- User hints
+- Game settings
+- First card decline option

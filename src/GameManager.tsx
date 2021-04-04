@@ -435,12 +435,6 @@ function rankCardUtility(deadwood: Card[]): Utility[]{
 
         score -= (CARD_VALUES.indexOf(card.value) + 1)/10
 
-        /*if(CARD_VALUES.indexOf(card.value) > 8){
-            score--
-        } else if(CARD_VALUES.indexOf(card.value) < 2){
-            score++
-        }*/
-
         return {card, score}
     }).sort((cardUtilityA, cardUtilityB) => cardUtilityB.score - cardUtilityA.score)
 
