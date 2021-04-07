@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { CARD_VALUES, SUITS, GIN_BONUS, UNDERCUT_BONUS, NULL_GAME } from "./Constants";
+import { CARD_VALUES, SUITS, GIN_BONUS, UNDERCUT_BONUS, NULL_GAME, GAME_SCORE_LIMIT } from "./Constants";
 import _ from 'lodash';
 import { CardHand, getFlatHand, getCardInSequence, HandState, Card, cardToString, calculateDeadwood, nameOfCard } from "./CardHand";
 import Icon from '@mdi/react'
 import { mdiMenu } from '@mdi/js'
-import { Dropdown } from "react-bootstrap";
+import Dropdown from "react-bootstrap/Dropdown";
+import Modal from "react-bootstrap/Modal";
+import Button from "react-bootstrap/Button";
+
+
 
 export type GameState = {
     userHand: HandState
@@ -28,7 +32,7 @@ export function GameManager(props: {onExit: (toggle: boolean) => void}){
     const [gameState, setGameState] = useState<GameState>(NULL_GAME)
 
     useEffect(()=> {
-        if(gameState.currentStage === 'computer'){
+         if(gameState.currentStage === 'computer'){
             setGameState({...computerPlayerTurn(gameState)})
         }
     }, [gameState])
@@ -48,19 +52,34 @@ export function GameManager(props: {onExit: (toggle: boolean) => void}){
         }
     }
 
+    const gameWon = gameState.userGameScore >= GAME_SCORE_LIMIT || gameState.computerGameScore >= GAME_SCORE_LIMIT
+
     return(
         <div style={{margin: '30px'}}>
+            <Modal show={gameWon} backdrop="static" size="lg" centered>
+                <Modal.Dialog>
+                    <Modal.Body>
+                        <p className='game-text'>{`${gameState.winner ?? ''} won the game`}</p>
+                        <p className='game-text'>Do you want to play again?</p>
+                    </Modal.Body>
+
+                    <Modal.Footer>
+                        <Button variant="primary" onClick={() => setGameState(initGameState())}>Yes</Button>
+                        <Button variant="secondary" onClick={() => props.onExit(false)}>No</Button>
+                    </Modal.Footer>
+                </Modal.Dialog>
+            </Modal>
             <div style={{display: 'flex', justifyContent: 'space-between'}}>
                 <div></div>
                 <CardHand hand={gameState.computerHand} gameState={gameState} faceUp={gameState.currentStage === 'endround'}/>
                 <Dropdown>
-                    <Dropdown.Toggle className='menu-button'>
+                    <Dropdown.Toggle variant="outline-primary">
                         <Icon path={mdiMenu} size={2} color={"gray"}/>
                     </Dropdown.Toggle>
 
-                    <Dropdown.Menu className='in-game-menu'>
-                        <Dropdown.Item className='menu-item' onClick={() => setGameState(initGameState())}>Reset Game</Dropdown.Item>
-                        <Dropdown.Item className='menu-item' onClick={() => props.onExit(false)}>Exit Game</Dropdown.Item>
+                    <Dropdown.Menu>
+                        <Dropdown.Item  onClick={() => setGameState(initGameState())}>Reset Game</Dropdown.Item>
+                        <Dropdown.Item  onClick={() => props.onExit(false)}>Exit Game</Dropdown.Item>
                     </Dropdown.Menu>
                 </Dropdown>
             </div>
@@ -149,6 +168,8 @@ function initGameState(startStage?: string): GameState{
 
     const userGameScore = 0
     const computerGameScore = 0
+
+    console.log({ userHand, computerHand, deck, discard, currentStage, userGameScore, computerGameScore })
 
     return { userHand, computerHand, deck, discard, currentStage, userGameScore, computerGameScore }
 }
