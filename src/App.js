@@ -17,7 +17,7 @@ function App() {
                   textAlign: 'center',
                   padding: '20px'}}>Gin Rummy</h1>
       {
-        gameStarted ? <GameManager onExit={setGameStarted}/> : 
+        gameStarted ? <GameManager onExit={setGameStarted} discardMemory={10}/> : 
         <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '500px'}}>
           <button className='game-button' onClick={() => setGameStarted(true)}>Start Game</button>
         </div>

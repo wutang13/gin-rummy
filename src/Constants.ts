@@ -19,5 +19,7 @@ export const NULL_GAME = {
     discard: [],
     currentStage: '',
     userGameScore: 0,
-    computerGameScore: 0
+    computerGameScore: 0,
+    discardMemory: 10,
+    playerPickup: []
 }

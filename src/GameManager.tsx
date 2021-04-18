@@ -9,7 +9,6 @@ import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 
 
-
 export type GameState = {
     userHand: HandState
     computerHand: HandState
@@ -20,6 +19,8 @@ export type GameState = {
     computerMoves?: string[]
     userGameScore: number
     computerGameScore: number
+    discardMemory: number
+    playerPickup: Card[]
 }
 
 type Utility = {
@@ -27,17 +28,19 @@ type Utility = {
     score: number
 }
 
-export function GameManager(props: {onExit: (toggle: boolean) => void}){
+export function GameManager(props: {onExit: (toggle: boolean) => void, discardMemory: number}){
 
     const [gameState, setGameState] = useState<GameState>(NULL_GAME)
 
     useEffect(()=> {
-         if(gameState.currentStage === 'computer'){
+        if(gameState.deck.length < 3 && gameState.winner !== 'No one'){
+            setGameState({...gameState, winner: 'No one', currentStage: 'endround'})
+        } else if(gameState.currentStage === 'computer'){
             setGameState({...computerPlayerTurn(gameState)})
         }
     }, [gameState])
 
-    useEffect(() => setGameState({...initGameState()}), [])
+    useEffect(() => setGameState({...initGameState(props.discardMemory)}), [props.discardMemory])
 
     const turnText = () => {
         switch(gameState.currentStage){
@@ -64,21 +67,21 @@ export function GameManager(props: {onExit: (toggle: boolean) => void}){
                     </Modal.Body>
 
                     <Modal.Footer>
-                        <Button variant="primary" onClick={() => setGameState(initGameState())}>Yes</Button>
+                        <Button variant="primary" onClick={() => setGameState(initGameState(props.discardMemory))}>Yes</Button>
                         <Button variant="secondary" onClick={() => props.onExit(false)}>No</Button>
                     </Modal.Footer>
                 </Modal.Dialog>
             </Modal>
             <div style={{display: 'flex', justifyContent: 'space-between'}}>
                 <div></div>
-                <CardHand hand={gameState.computerHand} gameState={gameState} faceUp={gameState.currentStage === 'endround'}/>
+                <CardHand hand={gameState.computerHand} gameState={gameState} faceUp={!!gameState.currentStage}/>
                 <Dropdown>
                     <Dropdown.Toggle variant="outline-primary">
                         <Icon path={mdiMenu} size={2} color={"gray"}/>
                     </Dropdown.Toggle>
 
                     <Dropdown.Menu>
-                        <Dropdown.Item  onClick={() => setGameState(initGameState())}>Reset Game</Dropdown.Item>
+                        <Dropdown.Item  onClick={() => setGameState(initGameState(props.discardMemory))}>Reset Game</Dropdown.Item>
                         <Dropdown.Item  onClick={() => props.onExit(false)}>Exit Game</Dropdown.Item>
                     </Dropdown.Menu>
                 </Dropdown>
@@ -139,7 +142,7 @@ export function GameManager(props: {onExit: (toggle: boolean) => void}){
     )
 }
 
-function initGameState(startStage?: string): GameState{
+function initGameState(discardMemory: number, startStage?: string): GameState{
     let deck: Card[] = []
 
     SUITS.forEach((suit) => {
@@ -171,7 +174,7 @@ function initGameState(startStage?: string): GameState{
 
     console.log({ userHand, computerHand, deck, discard, currentStage, userGameScore, computerGameScore })
 
-    return { userHand, computerHand, deck, discard, currentStage, userGameScore, computerGameScore }
+    return { userHand, computerHand, deck, discard, currentStage, userGameScore, computerGameScore, discardMemory, playerPickup: []}
 }
 
 function startNextRound(gameState: GameState): GameState {
@@ -180,7 +183,7 @@ function startNextRound(gameState: GameState): GameState {
 
     const starter = gameState.winner === 'You' ? 'pickup' : 'computer'
 
-    return {...initGameState(starter), computerGameScore, userGameScore}
+    return {...initGameState(gameState.discardMemory, starter), computerGameScore, userGameScore}
 }
 
 function buildHand(flatHand: Card[]): HandState{
@@ -235,7 +238,62 @@ function buildHand(flatHand: Card[]): HandState{
     })
 
     const deadwood = filteredHand.filter((card) => !sets.flat().some(flatCard => card.value === flatCard?.value && card.suit === flatCard?.suit))
-    
+
+    /*sets.forEach((set) => {
+        if(set.filter(card => !!card).length > 3){
+            console.log(set)
+            const extraCard = set.find(card => makesSequence(deadwood, card))
+
+            if(extraCard){
+                const extraCardIndex = set.findIndex((card) => card.value === extraCard.value)
+                set.splice(extraCardIndex, 1)
+
+                const newSequence = () => {
+                    switch(extraCard.value){
+                        case 'K':
+                            return [getCardInSequence(extraCard, -2), getCardInSequence(extraCard, -1), extraCard]
+                        case 'A':
+                            return [extraCard, getCardInSequence(extraCard, 1), getCardInSequence(extraCard, 2)]
+                        default:
+                            return [getCardInSequence(extraCard, -1), extraCard, getCardInSequence(extraCard, 1)]
+                    }
+                }
+
+                const newRun: Card[] = []
+
+                newSequence().forEach((card) => {
+                    if(card){
+                        newRun.push(card)
+                        const deadIndex = deadwood.findIndex(deadCard => deadCard.value === card.value && deadCard.suit === card.suit)
+                        if(deadIndex > -1){
+                            deadwood.splice(deadIndex, 1)
+                        }
+                    }
+                })
+
+                runs.push(newRun)
+            }
+        }
+    }) 
+
+    const deadwoodCardCount = getValueCount(deadwood)
+    console.log(sets)
+    console.log(runs)
+    runs.forEach((run) => {
+        if(run.filter(card => !!card).length > 3){
+            console.log(run)
+            const extraCard = run.find(card => deadwoodCardCount[card.value] > 1 && [0, run.length-1].includes(run.findIndex(runCard => runCard.value === card.value && runCard.suit === card.suit)))
+                
+            if(extraCard){
+                const extraCardIndex = run.findIndex((card) => card.value === extraCard.value)
+                run.splice(extraCardIndex, 1)
+
+                const newSet = deadwood.filter(card => card.value === extraCard.value)
+                newSet.push(extraCard)
+                sets.push(newSet)
+            }
+        }
+    })*/
     
     return {sets, runs, deadwood}
 }
@@ -267,6 +325,7 @@ function pickupCard(faceUp: boolean, gameState: GameState): GameState{
             const handState = buildHand(hand)
             gameState.userHand = handState
             gameState.currentStage = "discard"
+            gameState.playerPickup.push(selectedCard)
         }
     }
 
@@ -303,8 +362,8 @@ function computerPlayerTurn(gameState: GameState){
         // Discard the card
         const discardIndex = hand.indexOf(selectedDiscardCard);
         if (discardIndex > -1) {
-        const discarded = hand.splice(discardIndex, 1);
-        gameState.discard.push(discarded[0])
+            const discarded = hand.splice(discardIndex, 1);
+            gameState.discard.push(discarded[0])
         }
     }
 
@@ -396,7 +455,7 @@ function evaluateMovesTraditional(gameState: GameState): Card | string{
 
     // Ranks cards by their likelyhood to contribute to a future set/run
     // Discard lowest of these
-    const rankedHand = rankCardUtility(gameState.computerHand.deadwood)
+    const rankedHand = rankCardUtility(gameState)
 
     const selectedCard = rankedHand.pop()?.card
 
@@ -407,9 +466,9 @@ function shouldKnock(gameState: GameState): boolean {
     // TODO extend for other situations
     const deadwoodScore = calculateDeadwood(gameState.computerHand.deadwood)
 
-    if(deadwoodScore === 0){
+    if(deadwoodScore < 3){
         return true
-    } else if(deadwoodScore <= 5 && gameState.deck.length > 18){
+    } else if(deadwoodScore < 7 && gameState.deck.length > 18){
         return true
     } else if(deadwoodScore <= 10 && gameState.deck.length > 25){
         return true
@@ -418,7 +477,7 @@ function shouldKnock(gameState: GameState): boolean {
     return false
 }
 
-function rankCardUtility(deadwood: Card[]): Utility[]{
+function rankCardUtility(gameState: GameState): Utility[]{
 
     // +1 for every copy of the card
     // +1 for every card in sequence
@@ -426,7 +485,13 @@ function rankCardUtility(deadwood: Card[]): Utility[]{
     // -1 if greater than 9
     // +1 if A or 2
 
+    const {computerHand, playerPickup, discardMemory} = gameState
+
+    const deadwood = computerHand.deadwood
+
     const cardValueCount = getValueCount(deadwood)
+
+    const rememberDiscard = gameState.discard.length >= discardMemory ? gameState.discard.slice(gameState.discard.length-discardMemory) : []
 
     const cardRanking = deadwood.map((card) =>{
         let score = 0
@@ -434,7 +499,7 @@ function rankCardUtility(deadwood: Card[]): Utility[]{
         let preRun = false
 
         if(cardValueCount[card.value] > 1){
-            score += (cardValueCount[card.value] - 1)
+            score += (cardValueCount[card.value] - 84)
             preSet = true
         }
 
@@ -442,13 +507,29 @@ function rankCardUtility(deadwood: Card[]): Utility[]{
         const prevCard = getCardInSequence(card, -1)
 
         if((nextCard && deadwood.some(card1 => cardToString(card1) === cardToString(nextCard))) || (prevCard && deadwood.some(card1 => cardToString(card1) === cardToString(prevCard)))){
-            score += 1
+            score += 82
             preRun = true
         }
 
         if(preRun && preSet){
-            score += 1
+            score += 10
         }
+
+        rememberDiscard.forEach((discarded) => {
+            if(discarded.value === card.value){
+                score -= 71
+            } else if(discarded.suit === card.suit && (getCardInSequence(card, 1)?.value === discarded.value || getCardInSequence(card, -1)?.value === discarded.value)){
+                score -= 71
+            }
+        })
+
+        playerPickup.forEach((picked) => {
+            if(picked.value === card.value){
+                score -= 15
+            } else if(picked.suit === card.suit && (getCardInSequence(card, 1)?.value === picked.value || getCardInSequence(card, -1)?.value === picked.value)){
+                score -= 15
+            }
+        })
 
         score -= (CARD_VALUES.indexOf(card.value) + 1)/10
 

@@ -1,12 +1,10 @@
-Create Normal Form Games for:
-- Pick up
-- End Round/End Game
-
 Read up on strategies
 
+Determine coeffiecients for utility weights and when to knock at each # of cards in the deck
+
 Improve:
-- Adjust discard based on card history
 - Adjust discard/pickup according user moves
+- Pick up discard if card utility is low enough
 
 Features
 - User hints

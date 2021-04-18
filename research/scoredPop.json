@@ -1,0 +1,1102 @@
+[
+    {
+        "phenotype": {
+            "runScore": 82,
+            "setScore": 84,
+            "trioScore": 10,
+            "discardedPenalty": -71,
+            "pickedPenalty": -15,
+            "valueBonus": 10
+        },
+        "score": 622
+    },
+    {
+        "phenotype": {
+            "runScore": 82,
+            "setScore": 84,
+            "trioScore": 66,
+            "discardedPenalty": -71,
+            "pickedPenalty": -15,
+            "valueBonus": 8
+        },
+        "score": 621
+    },
+    {
+        "phenotype": {
+            "runScore": 82,
+            "setScore": 84,
+            "trioScore": 8,
+            "discardedPenalty": -71,
+            "pickedPenalty": -15,
+            "valueBonus": 8
+        },
+        "score": 621
+    },
+    {
+        "phenotype": {
+            "runScore": 83,
+            "setScore": 84,
+            "trioScore": 8,
+            "discardedPenalty": -71,
+            "pickedPenalty": -15,
+            "valueBonus": 8
+        },
+        "score": 621
+    },
+    {
+        "phenotype": {
+            "runScore": 85,
+            "setScore": 84,
+            "trioScore": 8,
+            "discardedPenalty": -71,
+            "pickedPenalty": -15,
+            "valueBonus": 8
+        },
+        "score": 620
+    },
+    {
+        "phenotype": {
+            "runScore": 80,
+            "setScore": 86,
+            "trioScore": 97,
+            "discardedPenalty": -71,
+            "pickedPenalty": -15,
+            "valueBonus": 10
+        },
+        "score": 620
+    },
+    {
+        "phenotype": {
+            "runScore": 84,
+            "setScore": 86,
+            "trioScore": 66,
+            "discardedPenalty": -71,
+            "pickedPenalty": -15,
+            "valueBonus": 8
+        },
+        "score": 617
+    },
+    {
+        "phenotype": {
+            "runScore": 82,
+            "setScore": 86,
+            "trioScore": 8,
+            "discardedPenalty": -71,
+            "pickedPenalty": -15,
+            "valueBonus": 12
+        },
+        "score": 616
+    },
+    {
+        "phenotype": {
+            "runScore": 82,
+            "setScore": 84,
+            "trioScore": 98,
+            "discardedPenalty": -71,
+            "pickedPenalty": -17,
+            "valueBonus": 8
+        },
+        "score": 615
+    },
+    {
+        "phenotype": {
+            "runScore": 80,
+            "setScore": 86,
+            "trioScore": 97,
+            "discardedPenalty": -71,
+            "pickedPenalty": -15,
+            "valueBonus": 10
+        },
+        "score": 615
+    },
+    {
+        "phenotype": {
+            "runScore": 82,
+            "setScore": 86,
+            "trioScore": 98,
+            "discardedPenalty": -71,
+            "pickedPenalty": -15,
+            "valueBonus": 10
+        },
+        "score": 613
+    },
+    {
+        "phenotype": {
+            "runScore": 82,
+            "setScore": 84,
+            "trioScore": 98,
+            "discardedPenalty": -71,
+            "pickedPenalty": -15,
+            "valueBonus": 8
+        },
+        "score": 611
+    },
+    {
+        "phenotype": {
+            "runScore": 82,
+            "setScore": 86,
+            "trioScore": 8,
+            "discardedPenalty": -71,
+            "pickedPenalty": -15,
+            "valueBonus": 10
+        },
+        "score": 611
+    },
+    {
+        "phenotype": {
+            "runScore": 82,
+            "setScore": 84,
+            "trioScore": 98,
+            "discardedPenalty": -71,
+            "pickedPenalty": -15,
+            "valueBonus": 13
+        },
+        "score": 610
+    },
+    {
+        "phenotype": {
+            "runScore": 82,
+            "setScore": 84,
+            "trioScore": 98,
+            "discardedPenalty": -71,
+            "pickedPenalty": -17,
+            "valueBonus": 8
+        },
+        "score": 610
+    },
+    {
+        "phenotype": {
+            "runScore": 82,
+            "setScore": 84,
+            "trioScore": 10,
+            "discardedPenalty": -71,
+            "pickedPenalty": -17,
+            "valueBonus": 10
+        },
+        "score": 608
+    },
+    {
+        "phenotype": {
+            "runScore": 82,
+            "setScore": 86,
+            "trioScore": 66,
+            "discardedPenalty": -69,
+            "pickedPenalty": -11,
+            "valueBonus": 8
+        },
+        "score": 608
+    },
+    {
+        "phenotype": {
+            "runScore": 82,
+            "setScore": 86,
+            "trioScore": 8,
+            "discardedPenalty": -71,
+            "pickedPenalty": -15,
+            "valueBonus": 8
+        },
+        "score": 608
+    },
+    {
+        "phenotype": {
+            "runScore": 82,
+            "setScore": 84,
+            "trioScore": 66,
+            "discardedPenalty": -71,
+            "pickedPenalty": -15,
+            "valueBonus": 8
+        },
+        "score": 608
+    },
+    {
+        "phenotype": {
+            "runScore": 82,
+            "setScore": 84,
+            "trioScore": 98,
+            "discardedPenalty": -71,
+            "pickedPenalty": -15,
+            "valueBonus": 8
+        },
+        "score": 608
+    },
+    {
+        "phenotype": {
+            "runScore": 82,
+            "setScore": 84,
+            "trioScore": 10,
+            "discardedPenalty": -71,
+            "pickedPenalty": -17,
+            "valueBonus": 8
+        },
+        "score": 607
+    },
+    {
+        "phenotype": {
+            "runScore": 82,
+            "setScore": 84,
+            "trioScore": 10,
+            "discardedPenalty": -71,
+            "pickedPenalty": -17,
+            "valueBonus": 8
+        },
+        "score": 607
+    },
+    {
+        "phenotype": {
+            "runScore": 83,
+            "setScore": 84,
+            "trioScore": 8,
+            "discardedPenalty": -71,
+            "pickedPenalty": -15,
+            "valueBonus": 13
+        },
+        "score": 607
+    },
+    {
+        "phenotype": {
+            "runScore": 82,
+            "setScore": 84,
+            "trioScore": 8,
+            "discardedPenalty": -71,
+            "pickedPenalty": -15,
+            "valueBonus": 8
+        },
+        "score": 606
+    },
+    {
+        "phenotype": {
+            "runScore": 82,
+            "setScore": 84,
+            "trioScore": 98,
+            "discardedPenalty": -66,
+            "pickedPenalty": -15,
+            "valueBonus": 8
+        },
+        "score": 605
+    },
+    {
+        "phenotype": {
+            "runScore": 82,
+            "setScore": 84,
+            "trioScore": 8,
+            "discardedPenalty": -71,
+            "pickedPenalty": -15,
+            "valueBonus": 8
+        },
+        "score": 605
+    },
+    {
+        "phenotype": {
+            "runScore": 82,
+            "setScore": 84,
+            "trioScore": 98,
+            "discardedPenalty": -66,
+            "pickedPenalty": -15,
+            "valueBonus": 12
+        },
+        "score": 605
+    },
+    {
+        "phenotype": {
+            "runScore": 82,
+            "setScore": 84,
+            "trioScore": 66,
+            "discardedPenalty": -71,
+            "pickedPenalty": -15,
+            "valueBonus": 8
+        },
+        "score": 604
+    },
+    {
+        "phenotype": {
+            "runScore": 82,
+            "setScore": 86,
+            "trioScore": 8,
+            "discardedPenalty": -71,
+            "pickedPenalty": -15,
+            "valueBonus": 8
+        },
+        "score": 603
+    },
+    {
+        "phenotype": {
+            "runScore": 83,
+            "setScore": 84,
+            "trioScore": 10,
+            "discardedPenalty": -71,
+            "pickedPenalty": -15,
+            "valueBonus": 13
+        },
+        "score": 603
+    },
+    {
+        "phenotype": {
+            "runScore": 82,
+            "setScore": 84,
+            "trioScore": 8,
+            "discardedPenalty": -71,
+            "pickedPenalty": -15,
+            "valueBonus": 13
+        },
+        "score": 603
+    },
+    {
+        "phenotype": {
+            "runScore": 82,
+            "setScore": 86,
+            "trioScore": 8,
+            "discardedPenalty": -71,
+            "pickedPenalty": -15,
+            "valueBonus": 8
+        },
+        "score": 602
+    },
+    {
+        "phenotype": {
+            "runScore": 82,
+            "setScore": 86,
+            "trioScore": 8,
+            "discardedPenalty": -71,
+            "pickedPenalty": -15,
+            "valueBonus": 8
+        },
+        "score": 602
+    },
+    {
+        "phenotype": {
+            "runScore": 82,
+            "setScore": 84,
+            "trioScore": 8,
+            "discardedPenalty": -71,
+            "pickedPenalty": -15,
+            "valueBonus": 8
+        },
+        "score": 602
+    },
+    {
+        "phenotype": {
+            "runScore": 82,
+            "setScore": 84,
+            "trioScore": 98,
+            "discardedPenalty": -66,
+            "pickedPenalty": -15,
+            "valueBonus": 8
+        },
+        "score": 602
+    },
+    {
+        "phenotype": {
+            "runScore": 82,
+            "setScore": 84,
+            "trioScore": 10,
+            "discardedPenalty": -71,
+            "pickedPenalty": -15,
+            "valueBonus": 8
+        },
+        "score": 602
+    },
+    {
+        "phenotype": {
+            "runScore": 82,
+            "setScore": 84,
+            "trioScore": 98,
+            "discardedPenalty": -66,
+            "pickedPenalty": -15,
+            "valueBonus": 12
+        },
+        "score": 602
+    },
+    {
+        "phenotype": {
+            "runScore": 82,
+            "setScore": 84,
+            "trioScore": 98,
+            "discardedPenalty": -66,
+            "pickedPenalty": -15,
+            "valueBonus": 10
+        },
+        "score": 601
+    },
+    {
+        "phenotype": {
+            "runScore": 83,
+            "setScore": 86,
+            "trioScore": 98,
+            "discardedPenalty": -71,
+            "pickedPenalty": -15,
+            "valueBonus": 13
+        },
+        "score": 601
+    },
+    {
+        "phenotype": {
+            "runScore": 83,
+            "setScore": 84,
+            "trioScore": 8,
+            "discardedPenalty": -71,
+            "pickedPenalty": -15,
+            "valueBonus": 8
+        },
+        "score": 599
+    },
+    {
+        "phenotype": {
+            "runScore": 82,
+            "setScore": 84,
+            "trioScore": 10,
+            "discardedPenalty": -71,
+            "pickedPenalty": -15,
+            "valueBonus": 8
+        },
+        "score": 598
+    },
+    {
+        "phenotype": {
+            "runScore": 82,
+            "setScore": 84,
+            "trioScore": 10,
+            "discardedPenalty": -71,
+            "pickedPenalty": -15,
+            "valueBonus": 8
+        },
+        "score": 597
+    },
+    {
+        "phenotype": {
+            "runScore": 82,
+            "setScore": 84,
+            "trioScore": 8,
+            "discardedPenalty": -71,
+            "pickedPenalty": -15,
+            "valueBonus": 8
+        },
+        "score": 595
+    },
+    {
+        "phenotype": {
+            "runScore": 82,
+            "setScore": 84,
+            "trioScore": 8,
+            "discardedPenalty": -71,
+            "pickedPenalty": -15,
+            "valueBonus": 8
+        },
+        "score": 595
+    },
+    {
+        "phenotype": {
+            "runScore": 82,
+            "setScore": 84,
+            "trioScore": 8,
+            "discardedPenalty": -71,
+            "pickedPenalty": -15,
+            "valueBonus": 13
+        },
+        "score": 594
+    },
+    {
+        "phenotype": {
+            "runScore": 82,
+            "setScore": 84,
+            "trioScore": 98,
+            "discardedPenalty": -71,
+            "pickedPenalty": -15,
+            "valueBonus": 8
+        },
+        "score": 594
+    },
+    {
+        "phenotype": {
+            "runScore": 82,
+            "setScore": 84,
+            "trioScore": 93,
+            "discardedPenalty": -71,
+            "pickedPenalty": -15,
+            "valueBonus": 8
+        },
+        "score": 594
+    },
+    {
+        "phenotype": {
+            "runScore": 82,
+            "setScore": 84,
+            "trioScore": 98,
+            "discardedPenalty": -66,
+            "pickedPenalty": -15,
+            "valueBonus": 12
+        },
+        "score": 594
+    },
+    {
+        "phenotype": {
+            "runScore": 85,
+            "setScore": 84,
+            "trioScore": 8,
+            "discardedPenalty": -71,
+            "pickedPenalty": -15,
+            "valueBonus": 8
+        },
+        "score": 593
+    },
+    {
+        "phenotype": {
+            "runScore": 82,
+            "setScore": 84,
+            "trioScore": 8,
+            "discardedPenalty": -71,
+            "pickedPenalty": -15,
+            "valueBonus": 8
+        },
+        "score": 593
+    },
+    {
+        "phenotype": {
+            "runScore": 82,
+            "setScore": 84,
+            "trioScore": 10,
+            "discardedPenalty": -71,
+            "pickedPenalty": -15,
+            "valueBonus": 10
+        },
+        "score": 593
+    },
+    {
+        "phenotype": {
+            "runScore": 82,
+            "setScore": 84,
+            "trioScore": 8,
+            "discardedPenalty": -71,
+            "pickedPenalty": -15,
+            "valueBonus": 8
+        },
+        "score": 592
+    },
+    {
+        "phenotype": {
+            "runScore": 82,
+            "setScore": 84,
+            "trioScore": 98,
+            "discardedPenalty": -71,
+            "pickedPenalty": -15,
+            "valueBonus": 8
+        },
+        "score": 592
+    },
+    {
+        "phenotype": {
+            "runScore": 82,
+            "setScore": 84,
+            "trioScore": 98,
+            "discardedPenalty": -66,
+            "pickedPenalty": -15,
+            "valueBonus": 12
+        },
+        "score": 591
+    },
+    {
+        "phenotype": {
+            "runScore": 82,
+            "setScore": 84,
+            "trioScore": 8,
+            "discardedPenalty": -71,
+            "pickedPenalty": -15,
+            "valueBonus": 13
+        },
+        "score": 591
+    },
+    {
+        "phenotype": {
+            "runScore": 80,
+            "setScore": 86,
+            "trioScore": 10,
+            "discardedPenalty": -71,
+            "pickedPenalty": -15,
+            "valueBonus": 10
+        },
+        "score": 590
+    },
+    {
+        "phenotype": {
+            "runScore": 80,
+            "setScore": 86,
+            "trioScore": 97,
+            "discardedPenalty": -71,
+            "pickedPenalty": -15,
+            "valueBonus": 10
+        },
+        "score": 590
+    },
+    {
+        "phenotype": {
+            "runScore": 85,
+            "setScore": 84,
+            "trioScore": 8,
+            "discardedPenalty": -71,
+            "pickedPenalty": -15,
+            "valueBonus": 8
+        },
+        "score": 589
+    },
+    {
+        "phenotype": {
+            "runScore": 82,
+            "setScore": 84,
+            "trioScore": 98,
+            "discardedPenalty": -71,
+            "pickedPenalty": -15,
+            "valueBonus": 13
+        },
+        "score": 589
+    },
+    {
+        "phenotype": {
+            "runScore": 82,
+            "setScore": 84,
+            "trioScore": 66,
+            "discardedPenalty": -71,
+            "pickedPenalty": -15,
+            "valueBonus": 8
+        },
+        "score": 589
+    },
+    {
+        "phenotype": {
+            "runScore": 83,
+            "setScore": 84,
+            "trioScore": 8,
+            "discardedPenalty": -71,
+            "pickedPenalty": -15,
+            "valueBonus": 8
+        },
+        "score": 589
+    },
+    {
+        "phenotype": {
+            "runScore": 82,
+            "setScore": 84,
+            "trioScore": 8,
+            "discardedPenalty": -71,
+            "pickedPenalty": -15,
+            "valueBonus": 8
+        },
+        "score": 588
+    },
+    {
+        "phenotype": {
+            "runScore": 82,
+            "setScore": 84,
+            "trioScore": 10,
+            "discardedPenalty": -71,
+            "pickedPenalty": -15,
+            "valueBonus": 8
+        },
+        "score": 588
+    },
+    {
+        "phenotype": {
+            "runScore": 83,
+            "setScore": 84,
+            "trioScore": 8,
+            "discardedPenalty": -71,
+            "pickedPenalty": -15,
+            "valueBonus": 8
+        },
+        "score": 588
+    },
+    {
+        "phenotype": {
+            "runScore": 83,
+            "setScore": 84,
+            "trioScore": 98,
+            "discardedPenalty": -71,
+            "pickedPenalty": -15,
+            "valueBonus": 8
+        },
+        "score": 588
+    },
+    {
+        "phenotype": {
+            "runScore": 82,
+            "setScore": 84,
+            "trioScore": 10,
+            "discardedPenalty": -71,
+            "pickedPenalty": -17,
+            "valueBonus": 8
+        },
+        "score": 587
+    },
+    {
+        "phenotype": {
+            "runScore": 83,
+            "setScore": 84,
+            "trioScore": 10,
+            "discardedPenalty": -71,
+            "pickedPenalty": -15,
+            "valueBonus": 13
+        },
+        "score": 587
+    },
+    {
+        "phenotype": {
+            "runScore": 83,
+            "setScore": 84,
+            "trioScore": 66,
+            "discardedPenalty": -71,
+            "pickedPenalty": -15,
+            "valueBonus": 8
+        },
+        "score": 586
+    },
+    {
+        "phenotype": {
+            "runScore": 84,
+            "setScore": 84,
+            "trioScore": 8,
+            "discardedPenalty": -71,
+            "pickedPenalty": -15,
+            "valueBonus": 8
+        },
+        "score": 586
+    },
+    {
+        "phenotype": {
+            "runScore": 82,
+            "setScore": 86,
+            "trioScore": 10,
+            "discardedPenalty": -71,
+            "pickedPenalty": -15,
+            "valueBonus": 8
+        },
+        "score": 586
+    },
+    {
+        "phenotype": {
+            "runScore": 82,
+            "setScore": 84,
+            "trioScore": 10,
+            "discardedPenalty": -71,
+            "pickedPenalty": -17,
+            "valueBonus": 8
+        },
+        "score": 584
+    },
+    {
+        "phenotype": {
+            "runScore": 82,
+            "setScore": 86,
+            "trioScore": 66,
+            "discardedPenalty": -71,
+            "pickedPenalty": -15,
+            "valueBonus": 8
+        },
+        "score": 583
+    },
+    {
+        "phenotype": {
+            "runScore": 82,
+            "setScore": 84,
+            "trioScore": 10,
+            "discardedPenalty": -71,
+            "pickedPenalty": -15,
+            "valueBonus": 10
+        },
+        "score": 583
+    },
+    {
+        "phenotype": {
+            "runScore": 83,
+            "setScore": 84,
+            "trioScore": 8,
+            "discardedPenalty": -71,
+            "pickedPenalty": -15,
+            "valueBonus": 8
+        },
+        "score": 581
+    },
+    {
+        "phenotype": {
+            "runScore": 82,
+            "setScore": 84,
+            "trioScore": 10,
+            "discardedPenalty": -71,
+            "pickedPenalty": -17,
+            "valueBonus": 8
+        },
+        "score": 581
+    },
+    {
+        "phenotype": {
+            "runScore": 82,
+            "setScore": 84,
+            "trioScore": 98,
+            "discardedPenalty": -71,
+            "pickedPenalty": -17,
+            "valueBonus": 8
+        },
+        "score": 581
+    },
+    {
+        "phenotype": {
+            "runScore": 82,
+            "setScore": 86,
+            "trioScore": 98,
+            "discardedPenalty": -71,
+            "pickedPenalty": -15,
+            "valueBonus": 8
+        },
+        "score": 580
+    },
+    {
+        "phenotype": {
+            "runScore": 82,
+            "setScore": 84,
+            "trioScore": 98,
+            "discardedPenalty": -71,
+            "pickedPenalty": -15,
+            "valueBonus": 8
+        },
+        "score": 579
+    },
+    {
+        "phenotype": {
+            "runScore": 82,
+            "setScore": 84,
+            "trioScore": 10,
+            "discardedPenalty": -71,
+            "pickedPenalty": -15,
+            "valueBonus": 8
+        },
+        "score": 579
+    },
+    {
+        "phenotype": {
+            "runScore": 82,
+            "setScore": 84,
+            "trioScore": 66,
+            "discardedPenalty": -71,
+            "pickedPenalty": -15,
+            "valueBonus": 8
+        },
+        "score": 578
+    },
+    {
+        "phenotype": {
+            "runScore": 82,
+            "setScore": 86,
+            "trioScore": 8,
+            "discardedPenalty": -71,
+            "pickedPenalty": -15,
+            "valueBonus": 10
+        },
+        "score": 578
+    },
+    {
+        "phenotype": {
+            "runScore": 82,
+            "setScore": 86,
+            "trioScore": 66,
+            "discardedPenalty": -71,
+            "pickedPenalty": -15,
+            "valueBonus": 10
+        },
+        "score": 578
+    },
+    {
+        "phenotype": {
+            "runScore": 83,
+            "setScore": 84,
+            "trioScore": 66,
+            "discardedPenalty": -71,
+            "pickedPenalty": -15,
+            "valueBonus": 13
+        },
+        "score": 578
+    },
+    {
+        "phenotype": {
+            "runScore": 82,
+            "setScore": 84,
+            "trioScore": 10,
+            "discardedPenalty": -71,
+            "pickedPenalty": -17,
+            "valueBonus": 8
+        },
+        "score": 578
+    },
+    {
+        "phenotype": {
+            "runScore": 82,
+            "setScore": 84,
+            "trioScore": 8,
+            "discardedPenalty": -71,
+            "pickedPenalty": -15,
+            "valueBonus": 8
+        },
+        "score": 577
+    },
+    {
+        "phenotype": {
+            "runScore": 82,
+            "setScore": 84,
+            "trioScore": 8,
+            "discardedPenalty": -71,
+            "pickedPenalty": -15,
+            "valueBonus": 8
+        },
+        "score": 577
+    },
+    {
+        "phenotype": {
+            "runScore": 82,
+            "setScore": 86,
+            "trioScore": 98,
+            "discardedPenalty": -71,
+            "pickedPenalty": -15,
+            "valueBonus": 10
+        },
+        "score": 576
+    },
+    {
+        "phenotype": {
+            "runScore": 82,
+            "setScore": 86,
+            "trioScore": 10,
+            "discardedPenalty": -71,
+            "pickedPenalty": -15,
+            "valueBonus": 8
+        },
+        "score": 575
+    },
+    {
+        "phenotype": {
+            "runScore": 82,
+            "setScore": 84,
+            "trioScore": 10,
+            "discardedPenalty": -71,
+            "pickedPenalty": -15,
+            "valueBonus": 13
+        },
+        "score": 574
+    },
+    {
+        "phenotype": {
+            "runScore": 82,
+            "setScore": 84,
+            "trioScore": 8,
+            "discardedPenalty": -71,
+            "pickedPenalty": -15,
+            "valueBonus": 8
+        },
+        "score": 573
+    },
+    {
+        "phenotype": {
+            "runScore": 82,
+            "setScore": 84,
+            "trioScore": 8,
+            "discardedPenalty": -71,
+            "pickedPenalty": -15,
+            "valueBonus": 13
+        },
+        "score": 571
+    },
+    {
+        "phenotype": {
+            "runScore": 83,
+            "setScore": 84,
+            "trioScore": 8,
+            "discardedPenalty": -71,
+            "pickedPenalty": -15,
+            "valueBonus": 13
+        },
+        "score": 571
+    },
+    {
+        "phenotype": {
+            "runScore": 82,
+            "setScore": 84,
+            "trioScore": 98,
+            "discardedPenalty": -71,
+            "pickedPenalty": -15,
+            "valueBonus": 8
+        },
+        "score": 571
+    },
+    {
+        "phenotype": {
+            "runScore": 83,
+            "setScore": 84,
+            "trioScore": 98,
+            "discardedPenalty": -71,
+            "pickedPenalty": -15,
+            "valueBonus": 8
+        },
+        "score": 570
+    },
+    {
+        "phenotype": {
+            "runScore": 82,
+            "setScore": 86,
+            "trioScore": 8,
+            "discardedPenalty": -71,
+            "pickedPenalty": -15,
+            "valueBonus": 8
+        },
+        "score": 570
+    },
+    {
+        "phenotype": {
+            "runScore": 82,
+            "setScore": 86,
+            "trioScore": 66,
+            "discardedPenalty": -71,
+            "pickedPenalty": -15,
+            "valueBonus": 8
+        },
+        "score": 568
+    },
+    {
+        "phenotype": {
+            "runScore": 83,
+            "setScore": 84,
+            "trioScore": 8,
+            "discardedPenalty": -71,
+            "pickedPenalty": -15,
+            "valueBonus": 8
+        },
+        "score": 568
+    },
+    {
+        "phenotype": {
+            "runScore": 83,
+            "setScore": 84,
+            "trioScore": 97,
+            "discardedPenalty": -71,
+            "pickedPenalty": -15,
+            "valueBonus": 8
+        },
+        "score": 567
+    },
+    {
+        "phenotype": {
+            "runScore": 82,
+            "setScore": 84,
+            "trioScore": 10,
+            "discardedPenalty": -71,
+            "pickedPenalty": -17,
+            "valueBonus": 4
+        },
+        "score": 565
+    },
+    {
+        "phenotype": {
+            "runScore": 82,
+            "setScore": 84,
+            "trioScore": 10,
+            "discardedPenalty": -71,
+            "pickedPenalty": -15,
+            "valueBonus": 4
+        },
+        "score": 560
+    }
+]
