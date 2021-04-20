@@ -74,7 +74,7 @@ export function GameManager(props: {onExit: (toggle: boolean) => void, discardMe
             </Modal>
             <div style={{display: 'flex', justifyContent: 'space-between'}}>
                 <div></div>
-                <CardHand hand={gameState.computerHand} gameState={gameState} faceUp={!!gameState.currentStage}/>
+                <CardHand hand={gameState.computerHand} gameState={gameState} faceUp={!!gameState.winner}/>
                 <Dropdown>
                     <Dropdown.Toggle variant="outline-primary">
                         <Icon path={mdiMenu} size={2} color={"gray"}/>
@@ -138,6 +138,11 @@ export function GameManager(props: {onExit: (toggle: boolean) => void, discardMe
                 <p className='game-text'>{`Player Game Score: ${gameState.userGameScore}`}</p>
                 <p className='game-text'>{`Computer Game Score: ${gameState.computerGameScore}`}</p>
             </div> 
+
+            {gameState.currentStage === 'discard' &&
+             <div style={{display: 'flex', justifyContent: 'center'}}>
+                 <button className="game-button" onClick={() => alert(`Suggested Discard: ${discardSuggestion(gameState)}`)}>Hint</button> 
+             </div>}
         </div>
     )
 }
@@ -487,7 +492,7 @@ function rankCardUtility(gameState: GameState): Utility[]{
 
     const {computerHand, playerPickup, discardMemory} = gameState
 
-    const deadwood = computerHand.deadwood
+    const deadwood = gameState.currentStage !== 'computer' ? gameState.userHand.deadwood : computerHand.deadwood
 
     const cardValueCount = getValueCount(deadwood)
 
@@ -499,7 +504,7 @@ function rankCardUtility(gameState: GameState): Utility[]{
         let preRun = false
 
         if(cardValueCount[card.value] > 1){
-            score += (cardValueCount[card.value] - 84)
+            score += 1
             preSet = true
         }
 
@@ -507,29 +512,32 @@ function rankCardUtility(gameState: GameState): Utility[]{
         const prevCard = getCardInSequence(card, -1)
 
         if((nextCard && deadwood.some(card1 => cardToString(card1) === cardToString(nextCard))) || (prevCard && deadwood.some(card1 => cardToString(card1) === cardToString(prevCard)))){
-            score += 82
+            score += 1
             preRun = true
         }
 
         if(preRun && preSet){
-            score += 10
+            score += 1
         }
 
-        rememberDiscard.forEach((discarded) => {
-            if(discarded.value === card.value){
-                score -= 71
-            } else if(discarded.suit === card.suit && (getCardInSequence(card, 1)?.value === discarded.value || getCardInSequence(card, -1)?.value === discarded.value)){
-                score -= 71
-            }
-        })
+        if(gameState.currentStage === 'computer'){
+            rememberDiscard.forEach((discarded) => {
+                if(discarded.value === card.value){
+                    score -= 1
+                } else if(discarded.suit === card.suit && (getCardInSequence(card, 1)?.value === discarded.value || getCardInSequence(card, -1)?.value === discarded.value)){
+                    score -= 1
+                }
+            })
 
-        playerPickup.forEach((picked) => {
-            if(picked.value === card.value){
-                score -= 15
-            } else if(picked.suit === card.suit && (getCardInSequence(card, 1)?.value === picked.value || getCardInSequence(card, -1)?.value === picked.value)){
-                score -= 15
-            }
-        })
+            playerPickup.forEach((picked) => {
+                if(picked.value === card.value){
+                    score -= 1
+                } else if(picked.suit === card.suit && (getCardInSequence(card, 1)?.value === picked.value || getCardInSequence(card, -1)?.value === picked.value)){
+                    score -= 1
+                }
+            })
+        }
+
 
         score -= (CARD_VALUES.indexOf(card.value) + 1)/10
 
@@ -584,4 +592,16 @@ function layoff(gameState: GameState, user: boolean): {updatedPlayerScore: numbe
 
         return {updatedPlayerScore: calculateDeadwood(tempDeadwood), updatedComputerScore: calculateDeadwood(gameState.computerHand.deadwood)}
     }
+}
+
+function discardSuggestion(gameState: GameState): string{
+    const userHandUtility = rankCardUtility(gameState)
+
+    const suggestedCard = userHandUtility.pop()
+
+    if(!suggestedCard){
+        return 'No suggestion at this time'
+    }
+    
+    return nameOfCard(suggestedCard.card)
 }
