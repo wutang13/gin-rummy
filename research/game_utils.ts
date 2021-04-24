@@ -263,12 +263,17 @@ function evaluateMovesTraditional(gameState: GameState): Card | string{
 function shouldKnock(gameState: GameState): boolean {
     // TODO extend for other situations
     const deadwoodScore = gameState.currentStage === 'p1' ? calculateDeadwood(gameState.p1Hand.deadwood) : calculateDeadwood(gameState.p2Hand.deadwood)
+    const knockThresholds = gameState.currentStage === 'p1' ? gameState.p1.knockValues : gameState.p2.knockValues
 
-    if(deadwoodScore < 3){
+    if(deadwoodScore < knockThresholds[0]){
         return true
-    } else if(deadwoodScore < 7 && gameState.deck.length > 18){
+    } else if(deadwoodScore < knockThresholds[1] && gameState.deck.length > 6){
         return true
-    } else if(deadwoodScore <= 10 && gameState.deck.length > 25){
+    } else if(deadwoodScore <= knockThresholds[2] && gameState.deck.length > 12){
+        return true
+    } else if(deadwoodScore <= knockThresholds[3] && gameState.deck.length > 18){
+        return true
+    } else if(deadwoodScore <= knockThresholds[4] && gameState.deck.length > 24){
         return true
     }
 
@@ -299,7 +304,7 @@ function rankCardUtility(gameState: GameState): Utility[]{
         let preRun = false
 
         if(cardValueCount[card.value] > 1){
-            score += (cardValueCount[card.value] - 1) * currentPlayer.setScore
+            score += currentPlayer.setScore
             preSet = true
         }
 
@@ -411,34 +416,4 @@ function getCardInSequence(card: Card, offset = 1): Card | null {
 
 export function cardToString(card: Card): string{
     return `${card.value}${card.suit}`
-}
-
-function nameOfCard(card: Card): string{
-    const suit = () => {
-        switch(card.suit){
-            case 'H':
-                return 'Hearts'
-            case 'D':
-                return 'Diamonds'
-            case 'S':
-                return 'Spades'
-            default:
-                return 'Clubs'
-    }}
-
-    const value = () => {
-        switch(card.value){
-            case 'A':
-                return 'Ace'
-            case 'K':
-                return 'King'
-            case 'Q':
-                return 'Queen'
-            case 'J':
-                return 'Jack'
-            default:
-                return card.value
-    }}
-
-    return `${value()} of ${suit()}`
 }

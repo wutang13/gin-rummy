@@ -21,5 +21,7 @@ export const NULL_GAME = {
     userGameScore: 0,
     computerGameScore: 0,
     discardMemory: 10,
-    playerPickup: []
-}
+    playerPickup: [],
+    ginBonus: GIN_BONUS,
+    undercutBonus: UNDERCUT_BONUS
+} 

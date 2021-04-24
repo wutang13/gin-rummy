@@ -1,3 +1,4 @@
+import _ from "lodash"
 import { playGame } from "./game_utils"
 import { Player } from "./types"
 
@@ -5,20 +6,28 @@ function generatePopulation(n: number): Player[]{
     const population: Player[] = []
 
     for(let i = 0; i < n; i++){
-        const runScore = +Math.random().toFixed(2) * 100
-        const setScore = +Math.random().toFixed(2) * 100
-        const trioScore = +Math.random().toFixed(2) * 100
-        const discardedPenalty = +Math.random().toFixed(2) * -100
-        const pickedPenalty = +Math.random().toFixed(2) * -100
-        const valueBonus = +Math.random().toFixed(2) * 100
+        const runScore = +Math.random().toFixed(2) * 10
+        const setScore = +Math.random().toFixed(2) * 10
+        const trioScore = +Math.random().toFixed(2) * 10
+        const discardedPenalty = +Math.random().toFixed(2) * -10
+        const pickedPenalty = +Math.random().toFixed(2) * -10
+        const valueBonus = +Math.random().toFixed(2) * 20
+        const knockValues = [3,6,6,9,9]
 
-        population.push({runScore, setScore, trioScore, discardedPenalty, pickedPenalty, valueBonus})
+        population.push({runScore, setScore, trioScore, discardedPenalty, pickedPenalty, valueBonus, knockValues})
     }
 
     return population
 }
 
 function playerCrossover(p1: Player, p2: Player): Player[]{
+
+    const childKnockValues = [ _.mean([p1.knockValues[0],p2.knockValues[0]]),
+                               _.mean([p1.knockValues[1],p2.knockValues[1]]),
+                               _.mean([p1.knockValues[2],p2.knockValues[2]]),
+                               _.mean([p1.knockValues[3],p2.knockValues[3]]),
+                               _.mean([p1.knockValues[4],p2.knockValues[4]])
+                            ]
     const child1 = {
         runScore: Math.random() > 0.5 ? p1.runScore : p2.runScore,
         setScore: Math.random() > 0.5 ? p1.setScore : p2.setScore,
@@ -26,6 +35,7 @@ function playerCrossover(p1: Player, p2: Player): Player[]{
         discardedPenalty: Math.random() > 0.5 ? p1.discardedPenalty : p2.discardedPenalty,
         pickedPenalty: Math.random() > 0.5 ? p1.pickedPenalty : p2.pickedPenalty,
         valueBonus: Math.random() > 0.5 ? p1.valueBonus : p2.valueBonus,
+        knockValues: childKnockValues
     }
 
     const child2 = {
@@ -35,6 +45,7 @@ function playerCrossover(p1: Player, p2: Player): Player[]{
         discardedPenalty: Math.random() > 0.5 ? p1.discardedPenalty : p2.discardedPenalty,
         pickedPenalty: Math.random() > 0.5 ? p1.pickedPenalty : p2.pickedPenalty,
         valueBonus: Math.random() > 0.5 ? p1.valueBonus : p2.valueBonus,
+        knockValues: childKnockValues
     }
 
     return [child1, child2]
@@ -50,6 +61,11 @@ function mutatePlayer(player: Player): Player{
         discardedPenalty: Math.random() > mu ? player.discardedPenalty + Math.floor(Math.random() * (5 - (-5) + 1)) + (-5) : player.discardedPenalty,
         pickedPenalty: Math.random() > mu ? player.pickedPenalty + Math.floor(Math.random() * (5 - (-5) + 1)) + (-5) : player.pickedPenalty,
         valueBonus: Math.random() > mu ? player.valueBonus + Math.floor(Math.random() * (5 - (-5) + 1)) + (-5) : player.valueBonus,
+        knockValues: player.knockValues.map((val) => { 
+            const mutatedVal =  val + Math.floor(Math.random() * (1 - (-1) + 1)) + (-1)
+            const limitedMutatedVal = Math.min(Math.max(mutatedVal, 0), 10)
+            return Math.random() > mu ? limitedMutatedVal : val
+        })
     }
 
     return newPlayer
@@ -64,11 +80,12 @@ function playerFitness(player: Player): number{
         discardedPenalty: -1,
         pickedPenalty: -1,
         valueBonus: 10,
+        knockValues: [3,6,6,9,9]
     }
 
     let gamesWon = 0
 
-    for(let i = 0; i < 1000; i++){
+    for(let i = 0; i < 100; i++){
         const won = playGame(player, defaultPlayer)
         if(won){
             gamesWon++
@@ -82,7 +99,7 @@ function playTournament(player1: Player, player2: Player): boolean{
     let p1Wins = 0
     let p2Wins = 0
 
-    for(let i = 0; i < 1000; i++){
+    for(let i = 0; i < 100; i++){
         const win = playGame(player1, player2)
 
         win ? p1Wins++ : p2Wins++
@@ -122,7 +139,7 @@ function determineCoefficients(generations: number, populationSize: number): any
     return geneticalgorithm.scoredPopulation()
 }
 
-const scoredPop = determineCoefficients(100, 100)
+const scoredPop = determineCoefficients(100, 1000)
 const sortedPop = scoredPop.sort((indvA, indvB) => indvB.score - indvA.score)
 const fs = require('fs')
 

@@ -37,6 +37,7 @@ export type Player = {
     discardedPenalty: number
     pickedPenalty: number
     valueBonus: number
+    knockValues: number[]
 }
 
 export const SUITS = ['S', 'C', 'H', 'D']

@@ -66,3 +66,18 @@ code {
   display: flex;
   flex-direction: column;
 }
+
+.settings-item {
+  display: flex; 
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+  width: -webkit-fill-available;
+}
+
+input {
+  border-radius: 5px;
+  border: 2px solid #b34332;
+  color: rgb(87, 87, 87);
+}

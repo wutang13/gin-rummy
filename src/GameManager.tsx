@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { CARD_VALUES, SUITS, GIN_BONUS, UNDERCUT_BONUS, NULL_GAME, GAME_SCORE_LIMIT } from "./Constants";
+import { CARD_VALUES, SUITS, NULL_GAME } from "./Constants";
 import _ from 'lodash';
 import { CardHand, getFlatHand, getCardInSequence, HandState, Card, cardToString, calculateDeadwood, nameOfCard } from "./CardHand";
 import Icon from '@mdi/react'
@@ -21,6 +21,8 @@ export type GameState = {
     computerGameScore: number
     discardMemory: number
     playerPickup: Card[]
+    ginBonus: number
+    undercutBonus: number
 }
 
 type Utility = {
@@ -28,7 +30,11 @@ type Utility = {
     score: number
 }
 
-export function GameManager(props: {onExit: (toggle: boolean) => void, discardMemory: number}){
+export function GameManager(props: {onExit: (toggle: boolean) => void,
+                                    discardMemory: number,
+                                    ginBonus: number,
+                                    undercutBonus: number,
+                                    gameScoreLimit: number}){
 
     const [gameState, setGameState] = useState<GameState>(NULL_GAME)
 
@@ -40,7 +46,8 @@ export function GameManager(props: {onExit: (toggle: boolean) => void, discardMe
         }
     }, [gameState])
 
-    useEffect(() => setGameState({...initGameState(props.discardMemory)}), [props.discardMemory])
+    useEffect(() => setGameState({...initGameState(props.discardMemory, props.ginBonus, props.undercutBonus)}),
+                                 [props.discardMemory, props.ginBonus, props.undercutBonus])
 
     const turnText = () => {
         switch(gameState.currentStage){
@@ -55,7 +62,7 @@ export function GameManager(props: {onExit: (toggle: boolean) => void, discardMe
         }
     }
 
-    const gameWon = gameState.userGameScore >= GAME_SCORE_LIMIT || gameState.computerGameScore >= GAME_SCORE_LIMIT
+    const gameWon = gameState.userGameScore >= props.gameScoreLimit || gameState.computerGameScore >= props.gameScoreLimit
 
     return(
         <div style={{margin: '30px'}}>
@@ -67,7 +74,7 @@ export function GameManager(props: {onExit: (toggle: boolean) => void, discardMe
                     </Modal.Body>
 
                     <Modal.Footer>
-                        <Button variant="primary" onClick={() => setGameState(initGameState(props.discardMemory))}>Yes</Button>
+                        <Button variant="primary" onClick={() => setGameState(initGameState(props.discardMemory, props.ginBonus, props.undercutBonus))}>Yes</Button>
                         <Button variant="secondary" onClick={() => props.onExit(false)}>No</Button>
                     </Modal.Footer>
                 </Modal.Dialog>
@@ -81,7 +88,7 @@ export function GameManager(props: {onExit: (toggle: boolean) => void, discardMe
                     </Dropdown.Toggle>
 
                     <Dropdown.Menu>
-                        <Dropdown.Item  onClick={() => setGameState(initGameState(props.discardMemory))}>Reset Game</Dropdown.Item>
+                        <Dropdown.Item  onClick={() => setGameState(initGameState(props.discardMemory, props.ginBonus, props.undercutBonus))}>Reset Game</Dropdown.Item>
                         <Dropdown.Item  onClick={() => props.onExit(false)}>Exit Game</Dropdown.Item>
                     </Dropdown.Menu>
                 </Dropdown>
@@ -147,7 +154,7 @@ export function GameManager(props: {onExit: (toggle: boolean) => void, discardMe
     )
 }
 
-function initGameState(discardMemory: number, startStage?: string): GameState{
+function initGameState(discardMemory: number, ginBonus:number, undercutBonus: number, startStage?: string): GameState{
     let deck: Card[] = []
 
     SUITS.forEach((suit) => {
@@ -179,7 +186,17 @@ function initGameState(discardMemory: number, startStage?: string): GameState{
 
     console.log({ userHand, computerHand, deck, discard, currentStage, userGameScore, computerGameScore })
 
-    return { userHand, computerHand, deck, discard, currentStage, userGameScore, computerGameScore, discardMemory, playerPickup: []}
+    return { 
+            userHand,
+            computerHand,
+            deck, discard,
+            currentStage,
+            userGameScore,
+            computerGameScore,
+            discardMemory,
+            ginBonus,
+            undercutBonus,
+            playerPickup: []}
 }
 
 function startNextRound(gameState: GameState): GameState {
@@ -188,7 +205,7 @@ function startNextRound(gameState: GameState): GameState {
 
     const starter = gameState.winner === 'You' ? 'pickup' : 'computer'
 
-    return {...initGameState(gameState.discardMemory, starter), computerGameScore, userGameScore}
+    return {...initGameState(gameState.discardMemory, gameState.ginBonus, gameState.undercutBonus, starter), computerGameScore, userGameScore}
 }
 
 function buildHand(flatHand: Card[]): HandState{
@@ -555,9 +572,9 @@ function knock(gameState: GameState, user: boolean): GameState{
     const computerScore = calculateDeadwood(gameState.computerHand.deadwood)
 
     if(user && (playerScore === 0)){
-        return {...gameState, userGameScore: gameState.userGameScore + computerScore+GIN_BONUS, winner: 'You'}
+        return {...gameState, userGameScore: gameState.userGameScore + computerScore + gameState.ginBonus, winner: 'You'}
     } else if(!user && (computerScore === 0)){
-        return {...gameState, computerGameScore:  gameState.computerGameScore + playerScore+GIN_BONUS, winner: 'Your Opponent'}
+        return {...gameState, computerGameScore:  gameState.computerGameScore + playerScore+gameState.ginBonus, winner: 'Your Opponent'}
     }
 
     const {updatedPlayerScore, updatedComputerScore} = layoff(gameState, user)
@@ -565,9 +582,9 @@ function knock(gameState: GameState, user: boolean): GameState{
     if(user && (updatedPlayerScore < updatedComputerScore)){
         return {...gameState, userGameScore: gameState.userGameScore + updatedComputerScore - updatedPlayerScore, winner: 'You'}
     } else if(user && (updatedPlayerScore > updatedComputerScore)){
-        return {...gameState, computerGameScore: gameState.computerGameScore + updatedPlayerScore - updatedComputerScore + UNDERCUT_BONUS,  winner: 'Your Opponent'}
+        return {...gameState, computerGameScore: gameState.computerGameScore + updatedPlayerScore - updatedComputerScore + gameState.undercutBonus,  winner: 'Your Opponent'}
     } else if(!user && (updatedPlayerScore < updatedComputerScore)){
-        return {...gameState, userGameScore:   gameState.userGameScore + updatedComputerScore - updatedPlayerScore + UNDERCUT_BONUS,  winner: 'You'}
+        return {...gameState, userGameScore:   gameState.userGameScore + updatedComputerScore - updatedPlayerScore + gameState.undercutBonus,  winner: 'You'}
     } else {
         return {...gameState, computerGameScore:  gameState.computerGameScore + updatedPlayerScore - updatedComputerScore,  winner: 'Your Opponent'}
     }

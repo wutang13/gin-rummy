@@ -216,13 +216,20 @@ function evaluateMovesTraditional(gameState) {
 function shouldKnock(gameState) {
     // TODO extend for other situations
     var deadwoodScore = gameState.currentStage === 'p1' ? calculateDeadwood(gameState.p1Hand.deadwood) : calculateDeadwood(gameState.p2Hand.deadwood);
-    if (deadwoodScore < 3) {
+    var knockThresholds = gameState.currentStage === 'p1' ? gameState.p1.knockValues : gameState.p2.knockValues;
+    if (deadwoodScore < knockThresholds[0]) {
         return true;
     }
-    else if (deadwoodScore < 7 && gameState.deck.length > 18) {
+    else if (deadwoodScore < knockThresholds[1] && gameState.deck.length > 6) {
         return true;
     }
-    else if (deadwoodScore <= 10 && gameState.deck.length > 25) {
+    else if (deadwoodScore <= knockThresholds[2] && gameState.deck.length > 12) {
+        return true;
+    }
+    else if (deadwoodScore <= knockThresholds[3] && gameState.deck.length > 18) {
+        return true;
+    }
+    else if (deadwoodScore <= knockThresholds[4] && gameState.deck.length > 24) {
         return true;
     }
     return false;
@@ -243,7 +250,7 @@ function rankCardUtility(gameState) {
         var preSet = false;
         var preRun = false;
         if (cardValueCount[card.value] > 1) {
-            score += (cardValueCount[card.value] - 1) * currentPlayer.setScore;
+            score += currentPlayer.setScore;
             preSet = true;
         }
         var nextCard = getCardInSequence(card, 1);
@@ -343,32 +350,3 @@ function cardToString(card) {
     return "" + card.value + card.suit;
 }
 exports.cardToString = cardToString;
-function nameOfCard(card) {
-    var suit = function () {
-        switch (card.suit) {
-            case 'H':
-                return 'Hearts';
-            case 'D':
-                return 'Diamonds';
-            case 'S':
-                return 'Spades';
-            default:
-                return 'Clubs';
-        }
-    };
-    var value = function () {
-        switch (card.value) {
-            case 'A':
-                return 'Ace';
-            case 'K':
-                return 'King';
-            case 'Q':
-                return 'Queen';
-            case 'J':
-                return 'Jack';
-            default:
-                return card.value;
-        }
-    };
-    return value() + " of " + suit();
-}
