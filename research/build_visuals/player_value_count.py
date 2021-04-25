@@ -12,13 +12,15 @@ player_values = {
             "trioScore": {},
             "discardedPenalty": {},
             "pickedPenalty": {},
-            "valueBonus": {}
+            "valueBonus": {},
             }
 
 for player in data:
     phenotype = player['phenotype']
 
-    for k, v in phenotype.items(): 
+    for k, v in phenotype.items():
+        if k == 'knockValues':
+            continue
         if player_values[k].get(v):
             player_values[k][v] += 1
         else:

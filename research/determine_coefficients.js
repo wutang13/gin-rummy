@@ -14,7 +14,7 @@ function generatePopulation(n) {
         var discardedPenalty = +Math.random().toFixed(2) * -10;
         var pickedPenalty = +Math.random().toFixed(2) * -10;
         var valueBonus = +Math.random().toFixed(2) * 20;
-        var knockValues = [3, 6, 6, 9, 9];
+        var knockValues = [3, 5, 7, 9, 9];
         population.push({ runScore: runScore, setScore: setScore, trioScore: trioScore, discardedPenalty: discardedPenalty, pickedPenalty: pickedPenalty, valueBonus: valueBonus, knockValues: knockValues });
     }
     return population;
@@ -72,7 +72,7 @@ function playerFitness(player) {
         discardedPenalty: -1,
         pickedPenalty: -1,
         valueBonus: 10,
-        knockValues: [3, 6, 6, 9, 9]
+        knockValues: [3, 5, 7, 9, 9]
     };
     var gamesWon = 0;
     for (var i = 0; i < 100; i++) {

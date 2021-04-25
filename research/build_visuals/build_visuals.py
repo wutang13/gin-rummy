@@ -8,7 +8,7 @@ data = None
 with open('../scoredPop.json') as f:
     data = json.load(f)
 
-x = [np.empty(100) for i in range(5)]
+x = [np.empty(1000) for i in range(5)]
 y = np.array([player['score'] for player in data])
 
 for feature in range(5):

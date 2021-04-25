@@ -12,7 +12,7 @@ function generatePopulation(n: number): Player[]{
         const discardedPenalty = +Math.random().toFixed(2) * -10
         const pickedPenalty = +Math.random().toFixed(2) * -10
         const valueBonus = +Math.random().toFixed(2) * 20
-        const knockValues = [3,6,6,9,9]
+        const knockValues = [3,5,7,9,9]
 
         population.push({runScore, setScore, trioScore, discardedPenalty, pickedPenalty, valueBonus, knockValues})
     }
@@ -80,7 +80,7 @@ function playerFitness(player: Player): number{
         discardedPenalty: -1,
         pickedPenalty: -1,
         valueBonus: 10,
-        knockValues: [3,6,6,9,9]
+        knockValues: [3,5,7,9,9]
     }
 
     let gamesWon = 0

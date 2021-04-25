@@ -521,7 +521,7 @@ function rankCardUtility(gameState: GameState): Utility[]{
         let preRun = false
 
         if(cardValueCount[card.value] > 1){
-            score += 1
+            score += 8.6
             preSet = true
         }
 
@@ -529,34 +529,34 @@ function rankCardUtility(gameState: GameState): Utility[]{
         const prevCard = getCardInSequence(card, -1)
 
         if((nextCard && deadwood.some(card1 => cardToString(card1) === cardToString(nextCard))) || (prevCard && deadwood.some(card1 => cardToString(card1) === cardToString(prevCard)))){
-            score += 1
+            score += 8.2
             preRun = true
         }
 
         if(preRun && preSet){
-            score += 1
+            score += 5.8
         }
 
         if(gameState.currentStage === 'computer'){
             rememberDiscard.forEach((discarded) => {
                 if(discarded.value === card.value){
-                    score -= 1
+                    score -= 6.8
                 } else if(discarded.suit === card.suit && (getCardInSequence(card, 1)?.value === discarded.value || getCardInSequence(card, -1)?.value === discarded.value)){
-                    score -= 1
+                    score -= 6.8
                 }
             })
 
             playerPickup.forEach((picked) => {
                 if(picked.value === card.value){
-                    score -= 1
+                    score -= 3.5
                 } else if(picked.suit === card.suit && (getCardInSequence(card, 1)?.value === picked.value || getCardInSequence(card, -1)?.value === picked.value)){
-                    score -= 1
+                    score -= 3.5
                 }
             })
         }
 
 
-        score -= (CARD_VALUES.indexOf(card.value) + 1)/10
+        score -= (CARD_VALUES.indexOf(card.value) + 1)/1.6
 
         return {card, score}
     }).sort((cardUtilityA, cardUtilityB) => cardUtilityB.score - cardUtilityA.score)
