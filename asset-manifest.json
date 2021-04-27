@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/gin-rummy/static/css/main.0bde3b46.chunk.css",
-    "main.js": "/gin-rummy/static/js/main.79941c99.chunk.js",
-    "main.js.map": "/gin-rummy/static/js/main.79941c99.chunk.js.map",
+    "main.js": "/gin-rummy/static/js/main.9172c25c.chunk.js",
+    "main.js.map": "/gin-rummy/static/js/main.9172c25c.chunk.js.map",
     "runtime-main.js": "/gin-rummy/static/js/runtime-main.7f016c42.js",
     "runtime-main.js.map": "/gin-rummy/static/js/runtime-main.7f016c42.js.map",
     "static/css/2.4c97ca4f.chunk.css": "/gin-rummy/static/css/2.4c97ca4f.chunk.css",
@@ -20,6 +20,6 @@
     "static/css/2.4c97ca4f.chunk.css",
     "static/js/2.e0432ba2.chunk.js",
     "static/css/main.0bde3b46.chunk.css",
-    "static/js/main.79941c99.chunk.js"
+    "static/js/main.9172c25c.chunk.js"
   ]
 }
