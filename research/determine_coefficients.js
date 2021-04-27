@@ -5,78 +5,86 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var lodash_1 = __importDefault(require("lodash"));
 var game_utils_1 = require("./game_utils");
+var types_1 = require("./types");
+function generateRandomCoefficient() {
+    var runScore = +Math.random().toFixed(2) * 10;
+    var setScore = +Math.random().toFixed(2) * 10;
+    var trioScore = +Math.random().toFixed(2) * 10;
+    var discardedPenalty = +Math.random().toFixed(2) * -10;
+    var pickedPenalty = +Math.random().toFixed(2) * -10;
+    var valueBonus = +Math.random().toFixed(2) * 20;
+    return { runScore: runScore, setScore: setScore, trioScore: trioScore, discardedPenalty: discardedPenalty, pickedPenalty: pickedPenalty, valueBonus: valueBonus };
+}
 function generatePopulation(n) {
     var population = [];
     for (var i = 0; i < n; i++) {
-        var runScore = +Math.random().toFixed(2) * 10;
-        var setScore = +Math.random().toFixed(2) * 10;
-        var trioScore = +Math.random().toFixed(2) * 10;
-        var discardedPenalty = +Math.random().toFixed(2) * -10;
-        var pickedPenalty = +Math.random().toFixed(2) * -10;
-        var valueBonus = +Math.random().toFixed(2) * 20;
         var knockValues = [3, 5, 7, 9, 9];
-        population.push({ runScore: runScore, setScore: setScore, trioScore: trioScore, discardedPenalty: discardedPenalty, pickedPenalty: pickedPenalty, valueBonus: valueBonus, knockValues: knockValues });
+        population.push({ knockValues: knockValues, earlyGame: generateRandomCoefficient(),
+            midGame: generateRandomCoefficient(),
+            lateGame: generateRandomCoefficient() });
     }
     return population;
 }
+function crossoverCoefficients(p1Coefficients, p2Coefficients) {
+    return {
+        runScore: Math.random() > 0.5 ? p1Coefficients.runScore : p2Coefficients.runScore,
+        setScore: Math.random() > 0.5 ? p1Coefficients.setScore : p2Coefficients.setScore,
+        trioScore: Math.random() > 0.5 ? p1Coefficients.trioScore : p2Coefficients.trioScore,
+        discardedPenalty: Math.random() > 0.5 ? p1Coefficients.discardedPenalty : p2Coefficients.discardedPenalty,
+        pickedPenalty: Math.random() > 0.5 ? p1Coefficients.pickedPenalty : p2Coefficients.pickedPenalty,
+        valueBonus: Math.random() > 0.5 ? p1Coefficients.valueBonus : p2Coefficients.valueBonus,
+    };
+}
 function playerCrossover(p1, p2) {
-    var childKnockValues = [lodash_1.default.mean([p1.knockValues[0], p2.knockValues[0]]),
-        lodash_1.default.mean([p1.knockValues[1], p2.knockValues[1]]),
-        lodash_1.default.mean([p1.knockValues[2], p2.knockValues[2]]),
-        lodash_1.default.mean([p1.knockValues[3], p2.knockValues[3]]),
-        lodash_1.default.mean([p1.knockValues[4], p2.knockValues[4]])
+    var childKnockValues = [
+        Math.round(lodash_1.default.mean([p1.knockValues[0], p2.knockValues[0]])),
+        Math.round(lodash_1.default.mean([p1.knockValues[1], p2.knockValues[1]])),
+        Math.round(lodash_1.default.mean([p1.knockValues[2], p2.knockValues[2]])),
+        Math.round(lodash_1.default.mean([p1.knockValues[3], p2.knockValues[3]])),
+        Math.round(lodash_1.default.mean([p1.knockValues[4], p2.knockValues[4]]))
     ];
     var child1 = {
-        runScore: Math.random() > 0.5 ? p1.runScore : p2.runScore,
-        setScore: Math.random() > 0.5 ? p1.setScore : p2.setScore,
-        trioScore: Math.random() > 0.5 ? p1.trioScore : p2.trioScore,
-        discardedPenalty: Math.random() > 0.5 ? p1.discardedPenalty : p2.discardedPenalty,
-        pickedPenalty: Math.random() > 0.5 ? p1.pickedPenalty : p2.pickedPenalty,
-        valueBonus: Math.random() > 0.5 ? p1.valueBonus : p2.valueBonus,
+        earlyGame: crossoverCoefficients(p1.earlyGame, p2.earlyGame),
+        midGame: crossoverCoefficients(p1.midGame, p2.midGame),
+        lateGame: crossoverCoefficients(p1.lateGame, p2.lateGame),
         knockValues: childKnockValues
     };
     var child2 = {
-        runScore: Math.random() > 0.5 ? p1.runScore : p2.runScore,
-        setScore: Math.random() > 0.5 ? p1.setScore : p2.setScore,
-        trioScore: Math.random() > 0.5 ? p1.trioScore : p2.trioScore,
-        discardedPenalty: Math.random() > 0.5 ? p1.discardedPenalty : p2.discardedPenalty,
-        pickedPenalty: Math.random() > 0.5 ? p1.pickedPenalty : p2.pickedPenalty,
-        valueBonus: Math.random() > 0.5 ? p1.valueBonus : p2.valueBonus,
+        earlyGame: crossoverCoefficients(p1.earlyGame, p2.earlyGame),
+        midGame: crossoverCoefficients(p1.midGame, p2.midGame),
+        lateGame: crossoverCoefficients(p1.lateGame, p2.lateGame),
         knockValues: childKnockValues
     };
     return [child1, child2];
 }
+function mutateCoefficients(player) {
+    return {
+        runScore: Math.random() > types_1.MU ? player.runScore + Math.floor(Math.random() * (5 - (-5) + 1)) + (-5) : player.runScore,
+        setScore: Math.random() > types_1.MU ? player.setScore + Math.floor(Math.random() * (5 - (-5) + 1)) + (-5) : player.setScore,
+        trioScore: Math.random() > types_1.MU ? player.trioScore + Math.floor(Math.random() * (5 - (-5) + 1)) + (-5) : player.trioScore,
+        discardedPenalty: Math.random() > types_1.MU ? player.discardedPenalty + Math.floor(Math.random() * (5 - (-5) + 1)) + (-5) : player.discardedPenalty,
+        pickedPenalty: Math.random() > types_1.MU ? player.pickedPenalty + Math.floor(Math.random() * (5 - (-5) + 1)) + (-5) : player.pickedPenalty,
+        valueBonus: Math.random() > types_1.MU ? player.valueBonus + Math.floor(Math.random() * (5 - (-5) + 1)) + (-5) : player.valueBonus
+    };
+}
 function mutatePlayer(player) {
-    var mu = 0.98;
     var newPlayer = {
-        runScore: Math.random() > mu ? player.runScore + Math.floor(Math.random() * (5 - (-5) + 1)) + (-5) : player.runScore,
-        setScore: Math.random() > mu ? player.setScore + Math.floor(Math.random() * (5 - (-5) + 1)) + (-5) : player.setScore,
-        trioScore: Math.random() > mu ? player.trioScore + Math.floor(Math.random() * (5 - (-5) + 1)) + (-5) : player.trioScore,
-        discardedPenalty: Math.random() > mu ? player.discardedPenalty + Math.floor(Math.random() * (5 - (-5) + 1)) + (-5) : player.discardedPenalty,
-        pickedPenalty: Math.random() > mu ? player.pickedPenalty + Math.floor(Math.random() * (5 - (-5) + 1)) + (-5) : player.pickedPenalty,
-        valueBonus: Math.random() > mu ? player.valueBonus + Math.floor(Math.random() * (5 - (-5) + 1)) + (-5) : player.valueBonus,
+        earlyGame: mutateCoefficients(player.earlyGame),
+        midGame: mutateCoefficients(player.midGame),
+        lateGame: mutateCoefficients(player.lateGame),
         knockValues: player.knockValues.map(function (val) {
             var mutatedVal = val + Math.floor(Math.random() * (1 - (-1) + 1)) + (-1);
             var limitedMutatedVal = Math.min(Math.max(mutatedVal, 0), 10);
-            return Math.random() > mu ? limitedMutatedVal : val;
+            return Math.random() > types_1.MU ? limitedMutatedVal : val;
         })
     };
     return newPlayer;
 }
 // Measure static fitness as the number of games won out of 100 vs default coefficients
 function playerFitness(player) {
-    var defaultPlayer = {
-        runScore: 1,
-        setScore: 1,
-        trioScore: 1,
-        discardedPenalty: -1,
-        pickedPenalty: -1,
-        valueBonus: 10,
-        knockValues: [3, 5, 7, 9, 9]
-    };
     var gamesWon = 0;
     for (var i = 0; i < 100; i++) {
-        var won = game_utils_1.playGame(player, defaultPlayer);
+        var won = game_utils_1.playGame(player, types_1.DEFAULT_PLAYER);
         if (won) {
             gamesWon++;
         }
@@ -120,3 +128,6 @@ var sortedPop = scoredPop.sort(function (indvA, indvB) { return indvB.score - in
 var fs = require('fs');
 var sortedPopJson = JSON.stringify(sortedPop, null, 4);
 fs.writeFileSync('scoredPop.json', sortedPopJson);
+var today = new Date();
+var endTime = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+console.log("Finished at " + endTime);

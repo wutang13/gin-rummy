@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { CARD_VALUES, SUITS, NULL_GAME } from "./Constants";
+import { CARD_VALUES, SUITS, NULL_GAME, EARLY_GAME_COEFFICIENTS, LATE_GAME_COEFFICIENTS, MID_GAME_COEFFICIENTS } from "./Constants";
 import _ from 'lodash';
 import { CardHand, getFlatHand, getCardInSequence, HandState, Card, cardToString, calculateDeadwood, nameOfCard } from "./CardHand";
 import Icon from '@mdi/react'
@@ -501,12 +501,6 @@ function shouldKnock(gameState: GameState): boolean {
 
 function rankCardUtility(gameState: GameState): Utility[]{
 
-    // +1 for every copy of the card
-    // +1 for every card in sequence
-    // +1 if part of trio
-    // -1 if greater than 9
-    // +1 if A or 2
-
     const {computerHand, playerPickup, discardMemory} = gameState
 
     const deadwood = gameState.currentStage !== 'computer' ? gameState.userHand.deadwood : computerHand.deadwood
@@ -515,13 +509,15 @@ function rankCardUtility(gameState: GameState): Utility[]{
 
     const rememberDiscard = gameState.discard.length >= discardMemory ? gameState.discard.slice(gameState.discard.length-discardMemory) : []
 
+    const coefficients = gameState.deck.length < 10 ? LATE_GAME_COEFFICIENTS : (gameState.deck.length < 20 ? MID_GAME_COEFFICIENTS : EARLY_GAME_COEFFICIENTS)
+    
     const cardRanking = deadwood.map((card) =>{
         let score = 0
         let preSet = false
         let preRun = false
 
         if(cardValueCount[card.value] > 1){
-            score += 8.6
+            score += coefficients.setScore
             preSet = true
         }
 
@@ -529,34 +525,34 @@ function rankCardUtility(gameState: GameState): Utility[]{
         const prevCard = getCardInSequence(card, -1)
 
         if((nextCard && deadwood.some(card1 => cardToString(card1) === cardToString(nextCard))) || (prevCard && deadwood.some(card1 => cardToString(card1) === cardToString(prevCard)))){
-            score += 8.2
+            score += coefficients.runScore
             preRun = true
         }
 
         if(preRun && preSet){
-            score += 5.8
+            score += coefficients.trioScore
         }
 
         if(gameState.currentStage === 'computer'){
             rememberDiscard.forEach((discarded) => {
                 if(discarded.value === card.value){
-                    score -= 6.8
+                    score += coefficients.discardedPenalty
                 } else if(discarded.suit === card.suit && (getCardInSequence(card, 1)?.value === discarded.value || getCardInSequence(card, -1)?.value === discarded.value)){
-                    score -= 6.8
+                    score += coefficients.discardedPenalty
                 }
             })
 
             playerPickup.forEach((picked) => {
                 if(picked.value === card.value){
-                    score -= 3.5
+                    score += coefficients.pickedPenalty
                 } else if(picked.suit === card.suit && (getCardInSequence(card, 1)?.value === picked.value || getCardInSequence(card, -1)?.value === picked.value)){
-                    score -= 3.5
+                    score += coefficients.pickedPenalty
                 }
             })
         }
 
 
-        score -= (CARD_VALUES.indexOf(card.value) + 1)/1.6
+        score -= (CARD_VALUES.indexOf(card.value) + 1)/coefficients.valueBonus
 
         return {card, score}
     }).sort((cardUtilityA, cardUtilityB) => cardUtilityB.score - cardUtilityA.score)

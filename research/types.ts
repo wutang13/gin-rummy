@@ -31,13 +31,19 @@ export type HandState = {
 }
 
 export type Player = {
+    earlyGame: PlayerCoefficients
+    midGame: PlayerCoefficients
+    lateGame: PlayerCoefficients
+    knockValues: number[]
+}
+
+export type PlayerCoefficients = {
     runScore: number
     setScore: number
     trioScore: number
     discardedPenalty: number
     pickedPenalty: number
     valueBonus: number
-    knockValues: number[]
 }
 
 export const SUITS = ['S', 'C', 'H', 'D']
@@ -52,6 +58,8 @@ export const GIN_BONUS = 25
 
 export const UNDERCUT_BONUS = 25
 
+export const MU = 0.98
+
 export const NULL_GAME = {
     userHand: {sets: [], runs: [], deadwood: []},
     computerHand: {sets: [], runs: [], deadwood: []},
@@ -62,4 +70,32 @@ export const NULL_GAME = {
     computerGameScore: 0,
     discardMemory: 10,
     playerPickup: []
+}
+
+export const DEFAULT_PLAYER = {
+    earlyGame: {
+        runScore: 1,
+        setScore: 1,
+        trioScore: 1,
+        discardedPenalty: -1,
+        pickedPenalty: -1,
+        valueBonus: 10,
+    },
+    midGame: {
+        runScore: 1,
+        setScore: 1,
+        trioScore: 1,
+        discardedPenalty: -1,
+        pickedPenalty: -1,
+        valueBonus: 10,
+    },
+    lateGame: {
+        runScore: 1,
+        setScore: 1,
+        trioScore: 1,
+        discardedPenalty: -1,
+        pickedPenalty: -1,
+        valueBonus: 10,
+    },
+    knockValues: [3,5,7,9,9]
 }

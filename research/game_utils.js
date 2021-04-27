@@ -243,6 +243,13 @@ function rankCardUtility(gameState) {
     var discardMemory = gameState.discardMemory;
     var deadwood = gameState.currentStage === 'p1' ? gameState.p1Hand.deadwood : gameState.p2Hand.deadwood;
     var currentPlayer = gameState.currentStage === 'p1' ? gameState.p1 : gameState.p2;
+    var currentPlayerStrategy = currentPlayer.earlyGame;
+    if (gameState.deck.length < 10) {
+        currentPlayerStrategy = currentPlayer.lateGame;
+    }
+    else if (gameState.deck.length < 20) {
+        currentPlayerStrategy = currentPlayer.midGame;
+    }
     var cardValueCount = getValueCount(deadwood);
     var rememberDiscard = gameState.discard.length >= discardMemory ? gameState.discard.slice(gameState.discard.length - discardMemory) : [];
     var cardRanking = deadwood.map(function (card) {
@@ -250,38 +257,38 @@ function rankCardUtility(gameState) {
         var preSet = false;
         var preRun = false;
         if (cardValueCount[card.value] > 1) {
-            score += currentPlayer.setScore;
+            score += currentPlayerStrategy.setScore;
             preSet = true;
         }
         var nextCard = getCardInSequence(card, 1);
         var prevCard = getCardInSequence(card, -1);
         if ((nextCard && deadwood.some(function (card1) { return cardToString(card1) === cardToString(nextCard); })) || (prevCard && deadwood.some(function (card1) { return cardToString(card1) === cardToString(prevCard); }))) {
-            score += currentPlayer.runScore;
+            score += currentPlayerStrategy.runScore;
             preRun = true;
         }
         if (preRun && preSet) {
-            score += currentPlayer.trioScore;
+            score += currentPlayerStrategy.trioScore;
         }
         rememberDiscard.forEach(function (discarded) {
             var _a, _b;
             if (discarded.value === card.value) {
-                score += currentPlayer.discardedPenalty;
+                score += currentPlayerStrategy.discardedPenalty;
             }
             else if (discarded.suit === card.suit && (((_a = getCardInSequence(card, 1)) === null || _a === void 0 ? void 0 : _a.value) === discarded.value || ((_b = getCardInSequence(card, -1)) === null || _b === void 0 ? void 0 : _b.value) === discarded.value)) {
-                score += currentPlayer.discardedPenalty;
+                score += currentPlayerStrategy.discardedPenalty;
             }
         });
         var pickup = gameState.currentStage === 'p1' ? gameState.p2Pickup : gameState.p1Pickup;
         pickup.forEach(function (picked) {
             var _a, _b;
             if (picked.value === card.value) {
-                score += currentPlayer.pickedPenalty;
+                score += currentPlayerStrategy.pickedPenalty;
             }
             else if (picked.suit === card.suit && (((_a = getCardInSequence(card, 1)) === null || _a === void 0 ? void 0 : _a.value) === picked.value || ((_b = getCardInSequence(card, -1)) === null || _b === void 0 ? void 0 : _b.value) === picked.value)) {
-                score += currentPlayer.pickedPenalty;
+                score += currentPlayerStrategy.pickedPenalty;
             }
         });
-        score -= (types_1.CARD_VALUES.indexOf(card.value) + 1) * currentPlayer.valueBonus;
+        score -= (types_1.CARD_VALUES.indexOf(card.value) + 1) * currentPlayerStrategy.valueBonus;
         return { card: card, score: score };
     }).sort(function (cardUtilityA, cardUtilityB) { return cardUtilityB.score - cardUtilityA.score; });
     return cardRanking;

@@ -294,6 +294,14 @@ function rankCardUtility(gameState: GameState): Utility[]{
 
     const currentPlayer = gameState.currentStage === 'p1' ? gameState.p1 : gameState.p2
 
+    let currentPlayerStrategy = currentPlayer.earlyGame
+    
+    if(gameState.deck.length < 10){
+        currentPlayerStrategy = currentPlayer.lateGame
+    } else if(gameState.deck.length < 20){
+        currentPlayerStrategy = currentPlayer.midGame
+    } 
+
     const cardValueCount = getValueCount(deadwood)
 
     const rememberDiscard = gameState.discard.length >= discardMemory ? gameState.discard.slice(gameState.discard.length-discardMemory) : []
@@ -304,7 +312,7 @@ function rankCardUtility(gameState: GameState): Utility[]{
         let preRun = false
 
         if(cardValueCount[card.value] > 1){
-            score += currentPlayer.setScore
+            score += currentPlayerStrategy.setScore
             preSet = true
         }
 
@@ -312,19 +320,19 @@ function rankCardUtility(gameState: GameState): Utility[]{
         const prevCard = getCardInSequence(card, -1)
 
         if((nextCard && deadwood.some(card1 => cardToString(card1) === cardToString(nextCard))) || (prevCard && deadwood.some(card1 => cardToString(card1) === cardToString(prevCard)))){
-            score += currentPlayer.runScore
+            score += currentPlayerStrategy.runScore
             preRun = true
         }
 
         if(preRun && preSet){
-            score += currentPlayer.trioScore
+            score += currentPlayerStrategy.trioScore
         }
 
         rememberDiscard.forEach((discarded) => {
             if(discarded.value === card.value){
-                score += currentPlayer.discardedPenalty
+                score += currentPlayerStrategy.discardedPenalty
             } else if(discarded.suit === card.suit && (getCardInSequence(card, 1)?.value === discarded.value || getCardInSequence(card, -1)?.value === discarded.value)){
-                score += currentPlayer.discardedPenalty
+                score += currentPlayerStrategy.discardedPenalty
             }
         })
 
@@ -332,13 +340,13 @@ function rankCardUtility(gameState: GameState): Utility[]{
 
         pickup.forEach((picked) => {
             if(picked.value === card.value){
-                score += currentPlayer.pickedPenalty
+                score += currentPlayerStrategy.pickedPenalty
             } else if(picked.suit === card.suit && (getCardInSequence(card, 1)?.value === picked.value || getCardInSequence(card, -1)?.value === picked.value)){
-                score += currentPlayer.pickedPenalty
+                score += currentPlayerStrategy.pickedPenalty
             }
         })
 
-        score -= (CARD_VALUES.indexOf(card.value) + 1)*currentPlayer.valueBonus
+        score -= (CARD_VALUES.indexOf(card.value) + 1)*currentPlayerStrategy.valueBonus
 
         return {card, score}
     }).sort((cardUtilityA, cardUtilityB) => cardUtilityB.score - cardUtilityA.score)
