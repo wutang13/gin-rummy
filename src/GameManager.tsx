@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { CARD_VALUES, SUITS, NULL_GAME, EARLY_GAME_COEFFICIENTS, LATE_GAME_COEFFICIENTS, MID_GAME_COEFFICIENTS } from "./Constants";
 import _ from 'lodash';
 import { CardHand, getFlatHand, getCardInSequence, HandState, Card, cardToString, calculateDeadwood, nameOfCard } from "./CardHand";
@@ -7,6 +7,9 @@ import { mdiMenu } from '@mdi/js'
 import Dropdown from "react-bootstrap/Dropdown";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
+import { Overlay } from "react-bootstrap";
+import Tooltip from "react-bootstrap/Tooltip";
+
 
 
 export type GameState = {
@@ -28,6 +31,7 @@ export type GameState = {
 type Utility = {
     card: Card
     score: number
+    message?: string
 }
 
 export function GameManager(props: {onExit: (toggle: boolean) => void,
@@ -37,6 +41,8 @@ export function GameManager(props: {onExit: (toggle: boolean) => void,
                                     gameScoreLimit: number}){
 
     const [gameState, setGameState] = useState<GameState>(NULL_GAME)
+    const [showHintTootip, setShowHintTooltip] = useState(false)
+    const target = useRef(null)
 
     useEffect(()=> {
         if(gameState.deck.length < 3 && gameState.winner !== 'No one'){
@@ -148,7 +154,15 @@ export function GameManager(props: {onExit: (toggle: boolean) => void,
 
             {gameState.currentStage === 'discard' &&
              <div style={{display: 'flex', justifyContent: 'center'}}>
-                 <button className="game-button" onClick={() => alert(`Suggested Discard: ${discardSuggestion(gameState)}`)}>Hint</button> 
+                 <button ref={target} className="game-button" onClick={() => setShowHintTooltip(!showHintTootip)}>Hint</button>
+                 <Overlay target={target.current} show={showHintTootip} placement="bottom">
+                    {(props) => (
+                        <Tooltip id="player-hint" {...props}>
+                            The card with the lowest utility in your hand is the {discardSuggestion(gameState)}.<br/><br/>
+                             This was determined as calculation of a card's possiblity to contribute to a set, run, or both along with its face value.
+                        </Tooltip>
+                    )}
+                </Overlay> 
              </div>}
         </div>
     )
